@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="header">
+    <h1 class="title">
+      <span class="black-text">SEND</span>
+      <span class="yellow-text">DATA</span>
+    </h1>
+    <div class="underline"></div>
+  </div>
+
+  <form class="form-container" [formGroup]="form" *ngIf="buyer$ | async as buyer">
+    <div class="form-section">
+      <h2 class="form-title">DATA</h2>
+
+      <div class="form-field">
+        <label>Name</label>
+        <p>{{ buyer.name }}</p>
+      </div>
+
+      <div class="form-field">
+        <label>Email</label>
+        <p>{{ buyer.email }}</p>
+      </div>
+
+      <div class="form-field">
+        <label>Telephone</label>
+        <input type="text" formControlName="phone" placeholder="Phone" />
+        <small class="error" *ngIf="form.controls['phone'].invalid && form.controls['phone'].touched">
+          Required (min 6 chars)
+        </small>
+      </div>
+
+      <div class="form-field">
+        <label>DNI</label>
+        <input type="text" formControlName="dni" placeholder="DNI" />
+        <small class="error" *ngIf="form.controls['dni'].invalid && form.controls['dni'].touched">
+          Required (min 8 chars)
+        </small>
+      </div>
+    </div>
+
+    <div class="location-section">
+      <div class="profile-icon">
+        <img [src]="buyer.photoUrl" alt="Profile Icon" />
+      </div>
+
+      <h2 class="location-title">Location</h2>
+      <input type="text" formControlName="location" placeholder="City, District" />
+    </div>
+
+    <div class="button-container">
+      <button
+        class="send-button"
+        type="button"
+        (click)="redirectToPay()"
+        [disabled]="form.invalid"
+      >
+        Send
+      </button>
+    </div>
+  </form>
+</div>

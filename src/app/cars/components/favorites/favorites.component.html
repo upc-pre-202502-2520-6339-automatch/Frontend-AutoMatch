@@ -1,0 +1,85 @@
+<section>
+  <div class="car-wrapper">
+    <div *ngIf="loading" class="loader-container">
+      <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+      <p>{{ 'LOADER' | translate }}</p>
+    </div>
+    <div *ngIf="!loading">
+    <div *ngIf="favorites.length > 0" class="car-header">
+      <div class="icon-wrapper">
+        <div class="icon-circle">
+          <i class="fa fa-star"></i>
+        </div>
+        <div class="header-underline"></div>
+      </div>
+      <div class="text-content">
+        <h2>{{ 'MY_FAVORITES' | translate }}</h2>
+        <span>{{ 'YOUR_FAVORITE_CARS' | translate }}</span>
+      </div>
+    </div>
+
+    <div *ngIf="favorites.length === 0" class="no-cars-message">
+      <div class="icon-wrapper">
+        <i class="fa fa-heart-broken"></i>
+      </div>
+      <p>{{ 'NO_FAVORITES_MESSAGE' | translate }} <a routerLink="/car-listing">{{ 'EXPLORE_CARS' | translate }}</a> {{ 'TO_ADD_FAVORITES' | translate }}</p>
+    </div>
+
+    <div class="car-container">
+      <div class="car-item-horizontal" *ngFor="let favorite of paginatedCars" (click)="viewCarDetails(favorite.vehicle.id)">
+        <div class="image-wrapper-horizontal">
+          <img [src]="favorite.vehicle.images[0]" alt="{{ favorite.vehicle.name }}" class="img-thumbnail">
+        </div>
+        <div class="content-horizontal">
+          <div class="title-favorite-wrapper">
+            <a>
+              <h4>{{ favorite.vehicle.brand }} {{ favorite.vehicle.model }}</h4>
+            </a>
+            <button class="delete-button" (click)="removeFavorite(favorite.vehicle.id); $event.stopPropagation()">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+          <span>{{ favorite.vehicle.price | currency }}</span>
+          <p>{{ favorite.vehicle.description }}</p>
+          <ul class="car-info">
+            <li>
+              <div class="item">
+                <i class="fas fa-calendar"></i>
+                <p>{{ favorite.vehicle.year }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="item">
+                <i class="fas fa-tachometer-alt"></i>
+                <p>{{ favorite.vehicle.speed }} {{ 'SPEED_UNIT' | translate }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="item">
+                <i class="fas fa-road"></i>
+                <p>{{ favorite.vehicle.mileage }} {{ 'MILEAGE_UNIT' | translate }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="item">
+                <i class="fas fa-gas-pump"></i>
+                <p>{{ favorite.vehicle.fuel }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button
+        class="page-button"
+        [class.active]="currentPage === page"
+        *ngFor="let page of [].constructor(totalPages); let i = index"
+        (click)="changePage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </div>
+  </div>
+  </div>
+</section>

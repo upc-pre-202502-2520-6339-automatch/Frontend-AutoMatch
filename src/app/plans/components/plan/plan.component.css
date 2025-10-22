@@ -1,0 +1,161 @@
+h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  color: #333;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.highlight {
+  color: #F4C23DFF;
+}
+
+.plan-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+.plan-card {
+  background-color: #fff;
+  flex: 1 1 calc(33.333% - 40px);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  text-align: left;
+  max-width: 400px;
+  transform: translateY(0);
+  opacity: 0;
+  animation: slideInUp 0.5s forwards;
+}
+
+.plan-card:nth-child(odd) {
+  animation-delay: 0.1s;
+}
+
+.plan-card:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+.plan-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.plan-header {
+  text-align: center;
+}
+
+.plan-header h5 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.plan-header h4 {
+  font-size: 32px;
+  font-weight: 900;
+  color: #F4C23DFF;
+  animation: fadeInDown 0.5s ease;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  margin: 20px 0;
+}
+
+.plan-features li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.plan-features li:hover {
+  transform: scale(1.05);
+}
+
+.plan-features i {
+  margin-right: 10px;
+  color: #f4c23d;
+}
+
+.plan-features i.unavailable {
+  color: #e74c3c;
+}
+
+.plan-features li.unavailable {
+  text-decoration: line-through;
+  color: #a0a0a0;
+}
+
+.choose-plan {
+  background: linear-gradient(135deg, #f4c23d, #f39c12);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.choose-plan:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #e67e22, #d35400);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.choose-plan:active {
+  transform: scale(1);
+}
+
+
+@media (max-width: 991px) {
+  .plan-card {
+    flex: 1 1 calc(50% - 40px);
+  }
+}
+
+@media (max-width: 600px) {
+  .plan-card {
+    flex: 1 1 100%;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

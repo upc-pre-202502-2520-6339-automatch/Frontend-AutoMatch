@@ -1,0 +1,20 @@
+<section>
+
+  <h1>{{ 'CHOOSE_PLAN' | translate }} <span class="highlight">{{ 'PLAN' | translate }}</span></h1>
+  <app-language-switcher></app-language-switcher>
+  <div class="plan-container">
+    <div *ngFor="let plan of plans" class="plan-card">
+      <div class="plan-header">
+        <h5>{{ plan.name | translate }}</h5>
+        <h4>S/ {{ plan.price }} / {{ 'PER_MONTH' | translate }}</h4>
+      </div>
+      <ul class="plan-features">
+        <li *ngFor="let feature of plan.features"
+            [ngClass]="{'unavailable': feature.startsWith('NO_')}">
+          {{ feature | translate }}
+        </li>
+      </ul>
+      <button class="choose-plan" (click)="selectPlan(plan)">{{ 'CHOOSE_PLAN_BUTTON' | translate }}</button>
+    </div>
+  </div>
+</section>

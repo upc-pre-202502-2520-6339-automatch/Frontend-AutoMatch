@@ -1,0 +1,30 @@
+.language-selector {
+  display: flex;
+  align-items: center;
+}
+
+.flag-icon {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.language-selector button {
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  margin-right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.language-selector button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.language-selector button:active .flag-icon {
+  transform: scale(1.1);
+}

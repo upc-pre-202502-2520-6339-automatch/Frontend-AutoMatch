@@ -1,0 +1,201 @@
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+h3 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  padding: 20px;
+  width: 100%;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.img-container {
+  width: 50%;
+  max-width: 100%;
+  max-height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.img-container img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.info-container {
+  flex: 1;
+  text-align: left;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+h4 {
+  margin-bottom: 15px;
+  font-size: 22px;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.owner-details, .review-details {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  width: 90%;
+}
+
+.owner-details p, .review-details p {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 16px;
+  color: #555;
+  max-width: 100%;
+  word-break: break-word;
+}
+
+.owner-details p i, .review-details p i {
+  margin-right: 12px;
+  color: #777;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.owner-details strong, .review-details strong {
+  margin-right: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.owner-details:hover, .review-details:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.no-review {
+  background-color: #f9f9f9;
+  padding: 10px;
+  color: #999;
+  text-align: center;
+  border-radius: 8px;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    padding: 15px;
+  }
+
+  .card-content {
+    gap: 20px;
+  }
+
+  .img-container img {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 85%;
+    margin-left: -5px;
+  }
+  .card-content {
+    flex-direction: column;
+  }
+
+  .img-container {
+    width: 100%;
+  }
+
+  .img-container img {
+    height: 300px;
+    width: 100%;
+  }
+
+  .info-container {
+    width: 100%;
+  }
+
+  .owner-details, .review-details {
+    width: 89%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+
+  h4 {
+    font-size: 20px;
+  }
+
+  .owner-details p, .review-details p {
+    font-size: 14px;
+  }
+
+  .img-container img {
+    height: auto;
+    width: 100%;
+  }
+
+  .card-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .owner-details, .review-details {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .owner-details, .review-details {
+    padding: 20px;
+    font-size: 15px;
+  }
+
+  .img-container img {
+    height: 300px;
+  }
+}

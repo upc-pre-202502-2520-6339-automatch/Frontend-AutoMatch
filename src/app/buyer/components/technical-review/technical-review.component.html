@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="header">
+    <div>
+      <h1 class="title">
+        <span class="black-text">{{ 'TECHNICAL' | translate }}</span>
+        <span class="yellow-text">{{ 'REVIEW' | translate }}</span>
+      </h1>
+      <div class="underline"></div>
+    </div>
+    <div class="button-container">
+      <button class="redirect-button" (click)="redirectToMTC()">
+        {{ 'TECHNICAL_DOCUMENT' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="content" *ngIf="info$ | async as info">
+    <p>{{ info.certifiedSealInfo }}</p>
+    <p>{{ info.subscriptionPlanBenefits }}</p>
+    <p>{{ info.observationRegularizationInfo }}</p>
+    <p>{{ info.premiumAnnouncementInfo }}</p>
+  </div>
+</div>

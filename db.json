@@ -1,0 +1,82 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "juan.seller",
+      "password": "123456",
+      "role": "seller",
+      "email": "juan@automatch.com",
+      "name": "Juan Aguilar",
+      "phone": "987654321",
+      "isProfileCreated": false
+    },
+    {
+      "id": 2,
+      "username": "maria.buyer",
+      "password": "abcde1",
+      "role": "buyer",
+      "email": "maria@automatch.com",
+      "name": "María López",
+      "phone": "912345678",
+      "isProfileCreated": false
+    }
+  ],
+  "cars": [
+    {
+      "id": 1,
+      "sellerId": 1,
+      "brand": "Toyota",
+      "model": "Corolla",
+      "year": 2020,
+      "color": "Silver",
+      "price": 15000,
+      "fuel": "Gasoline",
+      "transmission": "Automatic",
+      "mileage": 55000,
+      "imageUrl": "https://cdn.pixabay.com/photo/2012/05/29/00/43/car-49278_1280.jpg",
+      "status": "available"
+    },
+    {
+      "id": 2,
+      "sellerId": 1,
+      "brand": "Mazda",
+      "model": "CX-5",
+      "year": 2021,
+      "color": "Blue",
+      "price": 25000,
+      "fuel": "Gasoline",
+      "transmission": "Manual",
+      "mileage": 35000,
+      "imageUrl": "https://cdn.pixabay.com/photo/2017/06/01/18/39/mazda-2366825_1280.jpg",
+      "status": "available"
+    },
+    {
+      "id": 3,
+      "sellerId": 2,
+      "brand": "Kia",
+      "model": "Rio",
+      "year": 2019,
+      "color": "Red",
+      "price": 11000,
+      "fuel": "Gasoline",
+      "transmission": "Automatic",
+      "mileage": 68000,
+      "imageUrl": "https://cdn.pixabay.com/photo/2016/12/13/22/14/kia-1902210_1280.jpg",
+      "status": "sold"
+    }
+  ],
+  "favorites": [],
+  "messages": [],
+  "profiles": [
+    {
+      "id": 17399394939,
+      "userId": 1,
+      "first_name": "Juan",
+      "last_name": "Aguilar",
+      "email": "juan@automatch.com",
+      "dni": "12345678",
+      "address": "Av. Los Alamos 234",
+      "phone_number": "987654321"
+    }
+  ]
+}

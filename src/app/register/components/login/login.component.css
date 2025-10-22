@@ -1,0 +1,207 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  height: 100%;
+}
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.form-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+.form-container h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-container h2 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.full-width {
+  width: 60%;
+  margin-bottom: 15px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+
+.btn-signin {
+  color: #000;
+  width: 55%;
+  margin-top: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-signin:hover {
+  transform: scale(1.02);
+}
+
+.forgot-password-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-password-link {
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.social-login {
+  text-align: center;
+  margin-top: 20px;
+  width: 50%;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.separator span {
+  flex-grow: 1;
+  height: 2px;
+  background: linear-gradient(to left, transparent, #ccc);
+}
+
+.separator p {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #888;
+}
+
+.separator span.right {
+  background: linear-gradient(to right, transparent, #ccc);
+}
+
+.social-login-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.google-login, .apple-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  width: 48%;
+  text-align: center;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.google-login:hover, .apple-login:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.02);
+}
+
+.google-login img, .apple-login img {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.image-container {
+  width: 50%;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 101vh;
+  object-fit: cover;
+}
+
+.logo {
+  max-width: 130px;
+  margin-top: 15px;
+  align-self: center;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .form-container {
+    width: 80%;
+    justify-content: flex-start;
+    padding: 30px 20px 20px;
+  }
+
+  .image-container {
+    display: none;
+  }
+
+  .form-container input, .btn-signin, .form-container label {
+    width: 100%;
+  }
+
+  .social-login-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .google-login, .apple-login {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-height: 600px) {
+  .login-container {
+    height: auto;
+  }
+
+  .image-container img {
+    height: auto;
+  }
+}

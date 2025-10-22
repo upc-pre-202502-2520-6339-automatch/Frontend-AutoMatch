@@ -1,0 +1,269 @@
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.card {
+  width: calc(1000px - 40px);
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-50 {
+  flex: 1;
+  min-width: 300px;
+  max-width: 50%;
+}
+
+.image-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+
+.car-gallery {
+  width: 100%;
+  height: 430px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.car-gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.car-data {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.column-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+li i {
+  font-size: 22px;
+  padding: 10px;
+  background-color: #ffcf02;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+li span {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+
+.owner-info {
+  background-color: #e0f0ff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-left: 5px solid #367a9b;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+}
+
+.owner-info:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-left-color: #2b5c7a;
+}
+
+.owner-info h4 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.owner-info p {
+  font-size: 14px;
+  color: #555;
+  margin: 6px 0;
+}
+
+.owner-info p strong {
+  color: #333;
+}
+
+.owner-info span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+
+.review-section {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-section textarea {
+  width: 100%;
+  height: 100px;
+  max-height: 150px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.review-section p {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.review-section textarea:focus {
+  border-color: #4F889E;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+  background-color: #f0f8ff;
+}
+
+
+button {
+  background-color: #f4b400;
+  padding: 15px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #d99a00;
+  transform: scale(1.01);
+}
+
+.approval-section {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  position: relative;
+  padding-left: 30px;
+}
+
+.styled-checkbox {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #FFD700;
+  border-radius: 4px;
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.2s ease;
+}
+
+.styled-checkbox:checked + .custom-checkbox {
+  background-color: #FFD700;
+  border-color: #FFD700;
+}
+
+.custom-checkbox:after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 8px;
+  height: 14px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  opacity: 0;
+  transform: rotate(45deg);
+  transition: opacity 0.2s ease;
+}
+
+.styled-checkbox:checked + .custom-checkbox:after {
+  opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+  .col-50 {
+    max-width: 100%;
+  }
+  .card {
+    width: 100%;
+
+  }
+  .review-section {
+    width: 100%;
+  }
+}

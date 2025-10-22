@@ -1,0 +1,73 @@
+<section *ngIf="isBuyer">
+  <div *ngIf="loading" class="loader-container">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+    <p>{{ 'LOADER' | translate }}</p>
+  </div>
+
+  <div *ngIf="!loading" class="car-wrapper">
+    <div class="car-header">
+      <div class="icon-wrapper">
+        <div class="icon-circle"><i class="fa fa-car"></i></div>
+        <div class="header-underline"></div>
+      </div>
+      <div class="text-content">
+        <h2>{{ 'LISTING_CARS' | translate }}</h2>
+        <span>{{ 'EXPLORE_LISTING_CARS' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="car-container">
+      <div
+        class="car-item-horizontal"
+        *ngFor="let car of filteredCars()"
+        (click)="viewCarDetails(car.id)"
+      >
+        <div class="image-wrapper-horizontal">
+          <img [src]="car.mainImage || car.imageUrl || defaultImage"
+               alt="{{ car.brand }} {{ car.model }}"
+               class="img-thumbnail">
+        </div>
+
+        <div class="content-horizontal">
+          <div class="title-favorite-wrapper">
+            <a><h4>{{ car.brand }} {{ car.model }}</h4></a>
+            <button class="favorite-button" (click)="toggleFavorite(car); $event.stopPropagation()">
+              <i class="fa fa-star"></i>
+            </button>
+          </div>
+
+          <span>{{ car.price | currency }}</span>
+          <p>{{ car.description || 'Sin descripción' }}</p>
+
+          <ul class="car-info">
+            <li><i class="fas fa-calendar"></i> <p>{{ car.year }}</p></li>
+            <li><i class="fas fa-tachometer-alt"></i> <p>{{ car.speed || 0 }} {{ 'SPEED_UNIT' | translate }}</p></li>
+            <li><i class="fas fa-road"></i> <p>{{ car.mileage || 0 }} {{ 'MILEAGE_UNIT' | translate }}</p></li>
+            <li><i class="fas fa-gas-pump"></i> <p>{{ car.fuel || 'No especificado' }}</p></li>
+          </ul>
+
+          <!-- Botón eliminar -->
+          <button *ngIf="isSeller" class="delete-button" (click)="deleteCar(car); $event.stopPropagation()">
+            <i class="fa fa-trash"></i> Eliminar
+          </button>
+
+          <!-- Botón solicitar inspección -->
+          <button *ngIf="isSeller" class="inspection-button" (click)="requestInspection(car.id); $event.stopPropagation()">
+            <i class="fa fa-tools"></i> Solicitar inspección
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <button
+        class="page-button"
+        [class.active]="page === (index + 1)"
+        *ngFor="let index of [].constructor(Math.ceil(total / pageSize))"
+        (click)="pageChange(index + 1)"
+      >
+        {{ index + 1 }}
+      </button>
+    </div>
+  </div>
+</section>

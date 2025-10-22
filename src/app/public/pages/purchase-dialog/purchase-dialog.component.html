@@ -1,0 +1,10 @@
+<h2 mat-dialog-title>Confirmar compra</h2>
+<mat-dialog-content>
+  <p>¿Deseas comprar el vehículo <strong>{{ data.brand }} {{ data.model }}</strong> por 
+  <strong>{{ data.price | currency:'USD' }}</strong>?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="confirmPurchase()">Confirmar</button>
+</mat-dialog-actions>

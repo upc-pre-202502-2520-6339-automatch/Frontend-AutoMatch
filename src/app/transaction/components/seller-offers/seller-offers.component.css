@@ -1,0 +1,254 @@
+/* General Styles */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.transaction-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.transaction-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.horizontal-card {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 16px;
+}
+
+.horizontal-card-content {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 16px;
+  flex: 1;
+}
+
+.icon-wrapper {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.icon-circle {
+  background-color: #f4c23d;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.icon-circle i {
+  font-size: 28px;
+  color: #000;
+}
+
+.text-content h2 {
+  font-size: 22px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #1e1e1e;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.text-content span {
+  display: block;
+  color: #888;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header-underline {
+  width: 50px;
+  height: 4px;
+  background-color: #2959ad;
+  margin: 15px auto;
+  transition: width 0.3s ease-in-out;
+}
+
+.car-header:hover .header-underline {
+  width: 70px;
+}
+.vehicle-image {
+  width: 270px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-details,
+.buyer-details,
+.seller-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #f9f9f9;
+}
+
+.transaction-details {
+  background-color: #eef7ff;
+}
+
+.buyer-details,
+.seller-details {
+  background-color: #f9f9f9;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+mat-card-actions {
+  margin-top: 16px;
+}
+
+.pending-status {
+  color: orange;
+}
+
+.completed-status {
+  color: green;
+  font-weight: bold;
+}
+
+.cancelled-status {
+  color: red;
+  font-weight: bold;
+}
+
+.no-transactions {
+  text-align: center;
+  color: gray;
+  margin-top: 20px;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  color: #333;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 4px;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-dropdown {
+  width: 300px;
+}
+
+
+@media (max-width: 768px) {
+  .transaction-container {
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin: 0 auto;
+    margin-bottom: 60px;
+
+  }
+
+  .horizontal-card {
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin: 0 auto;
+  }
+
+  .vehicle-image {
+    width: 95% !important;
+    height: 300px !important;
+  }
+  .horizontal-card-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .transaction-details,
+  .buyer-details,
+  .seller-details {
+    width: 90%;
+    margin-bottom: 16px;
+  }
+  h4 {
+    font-size: 0.9rem !important;
+  }
+
+  .actions button {
+    width: 100% !important;
+    margin-top: 8px !important;
+  }
+  .transaction-card {
+    max-width: 60%;
+    margin: 0 auto;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .transaction-card {
+    max-width: 90%;
+    margin: 0 auto;
+  }
+
+  .filter-dropdown {
+    width: 100% !important;
+    margin: 0 8px;
+  }
+
+  p {
+    font-size: 0.8rem !important;
+    margin: 4px 0 !important;
+  }
+
+  h4 {
+    font-size: 0.85rem !important;
+  }
+}
+
+.loader-container p,
+.no-transactions p {
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.filter-container select {
+  font-size: 1rem;
+  padding: 8px;
+}
+
+.actions button {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+}
+
+.vehicle-image {
+  border: 2px solid #ddd;
+}

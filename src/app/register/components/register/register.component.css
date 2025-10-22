@@ -1,0 +1,234 @@
+
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  height: 100%;
+}
+
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+.form-container {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+.form-container h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.full-width {
+  width: 60%;
+
+  margin-bottom: 15px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.checkbox-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.checkbox-group mat-checkbox {
+  margin-right: 10px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"]:checked {
+  accent-color: #ffcc00;
+}
+
+/* Signup Button */
+.btn-signup {
+  background-color: #ffcc00;
+  color: #000;
+  width: 52.3%;
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.btn-signup:hover {
+
+  transform: scale(1.02);
+}
+
+
+.social-login {
+  text-align: center;
+  margin-top: 20px;
+  width: 50%;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.separator span {
+  flex-grow: 1;
+  height: 2px;
+  background: linear-gradient(to left, transparent, #ccc);
+}
+
+.separator p {
+  margin: 0 10px;
+  font-size: 14px;
+  color: #888;
+}
+
+.separator span.right {
+  background: linear-gradient(to right, transparent, #ccc);
+}
+
+.social-login-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.google-login, .apple-login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+  width: 48%;
+  text-align: center;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.google-login:hover, .apple-login:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.02);
+}
+
+.google-login img, .apple-login img {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+/* Footer */
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Image Container */
+.image-container {
+  width: 50%;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 101vh;
+  object-fit: cover;
+}
+
+.logo {
+  max-width: 130px;
+  margin-top: 15px;
+  align-self: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .form-container {
+    width: 120%;
+    padding: 20px;
+    justify-content: flex-start;
+    padding-top: 30px;
+  }
+
+  .image-container {
+    display: none;
+  }
+
+  .logo {
+    max-width: 120px;
+    margin-bottom: 15px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .social-login-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .google-login, .apple-login {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .btn-signup {
+    margin-top: 20px;
+    width: 60%;
+  }
+}
+
+@media (max-height: 600px) {
+  .login-container {
+    height: auto;
+  }
+
+  .image-container img {
+    height: auto;
+  }
+}

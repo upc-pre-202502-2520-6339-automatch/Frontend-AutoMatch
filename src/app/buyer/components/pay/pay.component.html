@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="header">
+    <h1 class="title"><span class="black-text">PAY</span></h1>
+    <div class="underline"></div>
+  </div>
+
+  <div class="data-container">
+    <div class="data-card" *ngIf="buyer$ | async as buyer">
+      <h2>DATA - BUYER</h2>
+      <p><strong>Name:</strong> {{ buyer.name }}</p>
+      <p><strong>Email:</strong> {{ buyer.email }}</p>
+      <p><strong>Telephone:</strong> {{ buyer.phone }}</p>
+      <p><strong>DNI:</strong> {{ buyer.dni }}</p>
+      <div class="profile-icon">
+        <img [src]="buyer.photoUrl" alt="Profile Icon" />
+      </div>
+    </div>
+
+    <div class="data-card" *ngIf="seller$ | async as seller">
+      <h2>DATA - SELLER</h2>
+      <p><strong>Name:</strong> {{ seller.name }}</p>
+      <p><strong>Email:</strong> {{ seller.email }}</p>
+      <p><strong>Telephone:</strong> {{ seller.phone }}</p>
+      <p><strong>DNI:</strong> {{ seller.dni }}</p>
+      <div class="profile-icon">
+        <img [src]="seller.photoUrl" alt="Profile Icon" />
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-container">
+    <div class="payment-title"><h2>PAYMENT INFORMATION</h2></div>
+
+    <form class="payment-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-field">
+        <label>ACCOUNT NUMBER</label>
+        <input type="text" formControlName="accountNumber" placeholder="Enter your account number" />
+        <small class="error" *ngIf="form.controls['accountNumber'].invalid && form.controls['accountNumber'].touched">
+  Required (min 6 chars)
+</small>
+
+      </div>
+
+      <div class="form-field">
+        <label>TRANSACTION NUMBER</label>
+        <input type="text" formControlName="transactionNumber" placeholder="Enter transaction number" />
+        <small class="error" *ngIf="form.controls['transactionNumber'].invalid && form.controls['transactionNumber'].touched">
+  Required (min 6 chars)
+</small>
+
+      </div>
+
+      <div class="button-container">
+        <button class="send-button" type="submit" [disabled]="loading || form.invalid">
+          {{ loading ? 'Sending…' : 'Send' }}
+        </button>
+      </div>
+
+      <p class="success" *ngIf="success">Payment sent successfully ✅</p>
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+    </form>
+  </div>
+</div>

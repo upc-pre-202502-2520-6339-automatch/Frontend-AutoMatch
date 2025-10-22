@@ -1,0 +1,30 @@
+.footer {
+  background-image: url('/assets/page_heading_bg.jpg');
+  color: #fff;
+  padding:20px 0;
+  width: 100%;
+  text-align: center;
+  position: static;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-social a {
+  color: #fff;
+  margin: 0 10px;
+  font-size: 20px;
+  transition: color 0.3s;
+}
+
+.footer-social a:hover {
+  color: #f4c23d;
+}
+
+.footer-info p {
+  margin: 5px 0;
+}

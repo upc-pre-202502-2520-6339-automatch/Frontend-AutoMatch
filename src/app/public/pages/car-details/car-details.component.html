@@ -1,0 +1,327 @@
+<main [@fadeIn]>
+  <div *ngIf="loading" class="loader-container">
+    <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+    <p>{{ 'LOADER' | translate }}</p>
+  </div>
+  <section class="car-details" *ngIf="userRole === 'ROLE_SELLER' && car">
+    <div class="back-button"></div>
+      <button class="go-back" routerLink="/cars">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'BACK_TO_LIST' | translate }}
+    </button>
+    <mat-card class="card">
+      <div class="car-gallery">
+        <div class="car-images">
+          <button (mousedown)="prevImage()" class="carousel-nav prev">&#10094;</button>
+          <div class="main-image"
+               (mousedown)="onMouseDown($event)"
+               (mousemove)="onMouseMove($event)"
+               (mouseup)="onMouseUp($event)">
+            <img class="image"[src]="mainImage" alt="Car image" (dragstart)="stopDragging()" />
+          </div>
+          <button (mousedown)="nextImage()" class="carousel-nav next">&#10095;</button>
+
+          <div class="thumbnails"
+               #thumbnailsContainer
+               (mousedown)="startDragging($event)"
+               (mousemove)="dragThumbnails($event)"
+               (mouseup)="stopDragging()"
+               (mouseleave)="stopDragging()">
+            <img *ngFor="let image of images; let i = index"
+                 [src]="image"
+                 alt="dots"
+                 (click)="changeImage(i)"
+                 [class.active]="i === currentIndex" />
+          </div>
+        </div>
+      </div>
+
+      <div class="car-information">
+        <div class="car-description">
+          <h4>
+            {{ car?.brand }} {{ car?.model }}
+            <button (click)="openEditModal()" class="edit-button">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </h4>
+          <h5>${{ car?.price }}</h5>
+          <p class="description">{{ car?.description }}</p>
+        </div>
+
+        <div class="car-data">
+          <div class="column-list">
+            <ul>
+              <li><i class="material-symbols-outlined">event</i><span>{{ car?.year }}</span></li>
+              <li><i class="material-symbols-outlined">auto_transmission</i><span>{{ car?.transmission }}</span></li>
+              <li><i class="material-symbols-outlined">bolt</i><span>{{ car?.engine }}</span></li>
+              <li><i class="material-symbols-outlined">location_on</i><span>{{ car?.location }}</span></li>
+            </ul>
+          </div>
+          <div class="column-list">
+            <ul>
+              <li><i class="material-symbols-outlined">invert_colors</i><span>{{ car?.color }}</span></li>
+              <li><i class="material-symbols-outlined">sensor_door</i><span>{{ car?.doors }}</span></li>
+              <li><i class="material-symbols-outlined">road</i><span>{{ car?.mileage }}</span></li>
+              <li><i class="material-symbols-outlined">speed</i><span>{{ car?.speed }}</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div *ngIf="car?.status === 'PENDING'" class="pending-message">
+          <p>{{ 'CAR_PENDING_REVIEW' | translate }}</p>
+        </div>
+        <div *ngIf="car?.status === 'REVIEWED'" class="reviewed-message">
+          <p>{{ 'CAR_REVIEWED' | translate }}</p>
+        </div>
+        <div *ngIf="car?.status === 'REJECT'" class="pending-message">
+          <p>{{ 'CAR_REJECTED' | translate }}</p>
+        </div>
+      </div>
+    </mat-card>
+  </section>
+
+  <section class="car-details" *ngIf="userRole === 'ROLE_BUYER' && car?.status === 'REVIEWED'">
+    <mat-card class="card">
+      <div class="car-gallery">
+        <div class="car-images">
+          <button (mousedown)="prevImage()" class="carousel-nav prev">&#10094;</button>
+          <div class="main-image"
+               (mousedown)="onMouseDown($event)"
+               (mousemove)="onMouseMove($event)"
+               (mouseup)="onMouseUp($event)">
+            <img [src]="mainImage" alt="Product Image" (dragstart)="stopDragging()" />
+          </div>
+          <button (mousedown)="nextImage()" class="carousel-nav next">&#10095;</button>
+
+          <div class="thumbnails"
+               #thumbnailsContainer
+               (mousedown)="startDragging($event)"
+               (mousemove)="dragThumbnails($event)"
+               (mouseup)="stopDragging()"
+               (mouseleave)="stopDragging()">
+            <img *ngFor="let image of images; let i = index"
+                 [src]="image"
+                 alt="Thumbnail"
+                 (click)="changeImage(i)"
+                 [class.active]="i === currentIndex" />
+          </div>
+        </div>
+      </div>
+
+      <div class="car-information">
+        <div class="car-description">
+          <h4>
+            {{ car?.brand }} {{ car?.model }}
+            <span class="safety-icon">
+              <mat-icon>shield</mat-icon>
+              <div class="safety-message">
+                {{ 'CAR_INSPECTED_MESSAGE' | translate }}
+                <button routerLink="/technical-review" class="review-button">{{ 'REVIEW_HERE' | translate }}</button>
+              </div>
+            </span>
+          </h4>
+          <h5>${{ car?.price }}</h5>
+          <p class="description">{{ car?.description }}</p>
+        </div>
+
+        <div class="car-data">
+          <div class="column-list">
+            <ul>
+              <li><i class="material-symbols-outlined">event</i><span>{{ car?.year }}</span></li>
+              <li><i class="material-symbols-outlined">auto_transmission</i><span>{{ car?.transmission }}</span></li>
+              <li><i class="material-symbols-outlined">bolt</i><span>{{ car?.engine }}</span></li>
+              <li><i class="material-symbols-outlined">location_on</i><span>{{ car?.location }}</span></li>
+            </ul>
+          </div>
+          <div class="column-list">
+            <ul>
+              <li><i class="material-symbols-outlined">invert_colors</i><span>{{ car?.color }}</span></li>
+              <li><i class="material-symbols-outlined">sensor_door</i><span>{{ car?.doors }}</span></li>
+              <li><i class="material-symbols-outlined">road</i><span>{{ car?.mileage }}</span></li>
+              <li><i class="material-symbols-outlined">speed</i><span>{{ car?.speed }}</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button [routerLink]="['/send-data', car?.id]" class="offer-button">
+            {{ 'ADD_OFFER' | translate }}
+          </button>
+        </div>
+
+      </div>
+    </mat-card>
+  </section>
+
+</main>
+
+<div class="modal" [ngClass]="{'show': isModalOpen}" (click)="closeOnOutsideClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <span class="close" (click)="closeEditModal()">&times;</span>
+
+    <div class="container">
+      <form [formGroup]="carForm" (ngSubmit)="editCar()">
+        <div class="form-section">
+          <div class="form-group">
+            <label for="name">{{ 'NAME' | translate }}</label>
+            <input formControlName="name" id="name" class="form-control" placeholder="{{ 'NAME_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="phone">{{ 'PHONE' | translate }}</label>
+            <input formControlName="phone" id="phone" class="form-control" placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="email">{{ 'EMAIL' | translate }}</label>
+            <input formControlName="email" id="email" class="form-control" placeholder="{{ 'EMAIL_PLACEHOLDER' | translate }}" />
+          </div>
+        </div>
+
+        <!-- PRICE Section -->
+        <div class="section-header">
+          <h3><span class="text-black">{{ 'PRICE' | translate }}</span></h3>
+        </div>
+        <div class="form-section">
+          <div class="form-group full-width">
+            <label for="price">{{ 'OFFER' | translate }}</label>
+            <input formControlName="price" id="price" class="form-control" placeholder="{{ 'OFFER_PLACEHOLDER' | translate }}" />
+            <small class="text-muted">{{ 'PAYMENT_INCLUDES_COMMISSION' | translate }}</small>
+          </div>
+        </div>
+
+        <!-- CAR DATA Section -->
+        <div class="section-header">
+          <h3><span class="text-black">{{ 'CAR_DATA' | translate }}</span></h3>
+        </div>
+        <div class="form-section">
+          <div class="form-group">
+            <label for="brand">{{ 'BRAND' | translate }}</label>
+            <input formControlName="brand" id="brand" class="form-control" placeholder="{{ 'BRAND_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="model">{{ 'MODEL' | translate }}</label>
+            <input formControlName="model" id="model" class="form-control" placeholder="{{ 'MODEL_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="color">{{ 'COLOR' | translate }}</label>
+            <input formControlName="color" id="color" class="form-control" placeholder="{{ 'COLOR_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="year">{{ 'YEAR_MANUFACTURE' | translate }}</label>
+            <input formControlName="year" id="year" class="form-control" placeholder="{{ 'YEAR_MANUFACTURE_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="transmission">{{ 'TRANSMISSION_TYPE' | translate }}</label>
+            <select formControlName="transmission" id="transmission" class="form-control">
+              <option value="">{{ 'SELECT_TRANSMISSION' | translate }}</option>
+              <option value="Manual">{{ 'MANUAL' | translate }}</option>
+              <option value="Automatic">{{ 'AUTOMATIC' | translate }}</option>
+              <option value="Semi-automatic">{{ 'SEMI_AUTOMATIC' | translate }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="engine">{{ 'ENGINE' | translate }}</label>
+            <input formControlName="engine" id="engine" class="form-control" placeholder="{{ 'ENGINE_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="mileage">{{ 'MILEAGE' | translate }}</label>
+            <input formControlName="mileage" id="mileage" class="form-control" placeholder="{{ 'MILEAGE_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="fuel">{{ 'FUEL_TYPE' | translate }}</label>
+            <select formControlName="fuel" id="fuel" class="form-control">
+              <option value="">{{ 'SELECT_FUEL_TYPE' | translate }}</option>
+              <option value="Gasoline">{{ 'GASOLINE' | translate }}</option>
+              <option value="Diesel">{{ 'DIESEL' | translate }}</option>
+              <option value="Electric">{{ 'ELECTRIC' | translate }}</option>
+              <option value="Hybrid">{{ 'HYBRID' | translate }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="speed">{{ 'SPEED' | translate }}</label>
+            <input formControlName="speed" id="speed" class="form-control" placeholder="{{ 'SPEED_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="doors">{{ 'DOORS' | translate }}</label>
+            <select formControlName="doors" id="doors" class="form-control">
+              <option value="">{{ 'SELECT_DOORS' | translate }}</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="status">{{ 'STATUS' | translate }}</label>
+            <input formControlName="status" id="status" class="form-control" placeholder="{{ 'STATUS_PLACEHOLDER' | translate }}" readonly />
+          </div>
+
+          <div class="form-group">
+            <label for="plate">{{ 'PLATE' | translate }}</label>
+            <input formControlName="plate" id="plate" class="form-control" placeholder="{{ 'PLATE_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group">
+            <label for="location">{{ 'LOCATION' | translate }}</label>
+            <input formControlName="location" id="location" class="form-control" placeholder="{{ 'LOCATION_PLACEHOLDER' | translate }}" />
+          </div>
+          <div class="form-group full-width">
+            <label for="description">{{ 'DESCRIPTION' | translate }}</label>
+            <textarea formControlName="description" id="description" class="form-control" placeholder="{{ 'DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h3><span class="text-black">{{ 'IMAGES' | translate }}</span></h3>
+        </div>
+        <div class="form-section full-width">
+          <div class="main-image-edit-container">
+            <div class="main-image-edit">
+              <img [src]="mainImage" alt="{{ 'MAIN_IMAGE' | translate }}" />
+            </div>
+          </div>
+
+          <div class="existing-images">
+            <p>
+              {{ 'EXISTING_IMAGES' | translate }}
+              <small>{{ 'CLICK_TO_SET_MAIN' | translate }}</small>
+            </p>
+            <div class="image-grid">
+              <div *ngFor="let image of images; let i = index" class="image-wrapper">
+                <img [src]="image" alt="{{ 'EXISTING_IMAGE' | translate }}" class="thumbnail" (click)="changeMainImage(i)" />
+                <button type="button" class="button-remove-image" (click)="removeImage(i)"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="temporary-images">
+            <div class="message-and-button">
+              <p class="temporary-message">
+                {{ 'TEMP_IMAGES_MESSAGE' | translate }}
+                <span class="highlight">{{ 'UPDATE_CAR' | translate }}</span>:
+              </p>
+              <div class="new-images">
+                <button type="button" (click)="triggerFileInput()">
+                  <svg aria-hidden="true" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-width="2" stroke="#ffffff" d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125" stroke-linejoin="round" stroke-linecap="round"></path>
+                    <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#ffffff" d="M17 15V18M17 21V18M17 18H14M17 18H20"></path>
+                  </svg>
+                </button>
+                <input id="newImages" type="file" (change)="onImageSelect($event)" class="hidden-file-input" multiple>
+              </div>
+            </div>
+
+            <div class="image-grid">
+              <div *ngFor="let tempImage of tempImages; let i = index" class="image-wrapper">
+                <img [src]="tempImage" alt="{{ 'NEW_IMAGE' | translate }}" class="thumbnail" />
+                <button type="button" class="button-remove-image" (click)="removeImage(i, true)"></button>
+              </div>
+            </div>
+            <div class="submit-button">
+              <button type="submit" class="btn btn-primary">{{ 'UPDATE_CAR' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

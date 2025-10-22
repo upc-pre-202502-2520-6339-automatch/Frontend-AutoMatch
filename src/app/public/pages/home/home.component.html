@@ -1,0 +1,162 @@
+<section *ngIf="userRole === 'ROLE_BUYER'">
+  <div class="car-wrapper" *ngIf="!loading; else buyerLoader">
+    <div class="car-header">
+      <div class="icon-wrapper">
+        <div class="icon-circle">
+          <i class="fa fa-car"></i>
+        </div>
+        <div class="header-underline"></div>
+      </div>
+      <div class="text-content">
+        <h2>{{ 'FEATURED_CARS' | translate }}</h2>
+        <span>{{ 'EXPLORE_TOP_CARS' | translate }}</span>
+      </div>
+    </div>
+
+    <div class="car-container">
+      <ng-container *ngFor="let car of cars | slice:0:6">
+        <div
+          class="car-item"
+          *ngIf="car.status === 'REVIEWED'"
+          (click)="viewCarDetails(car.id)"
+        >
+          <div class="thumb-content">
+            <div class="thumb-inner">
+              <div class="image-wrapper">
+
+                  <img [src]="car.image" alt="{{ car.brand }} {{car.model}}" class="img-thumbnail" width="150">
+
+              </div>
+            </div>
+          </div>
+
+          <div class="down-content">
+            <div class="title-favorite-wrapper">
+              <a>
+                <h4>{{ car.brand }} {{car.model}}</h4>
+              </a>
+              <button class="favorite-button" (click)="addToFavorites(car.id); $event.stopPropagation()">
+                <i class="fa fa-star"></i>
+              </button>
+            </div>
+            <span>{{ car.price | currency }}</span>
+            <p>{{ car.description }}</p>
+            <ul class="car-info">
+              <li>
+                <div class="item">
+                  <i class="fas fa-calendar"></i>
+                  <p>{{ car.year }}</p>
+                </div>
+              </li>
+              <li>
+                <div class="item">
+                  <i class="fas fa-tachometer-alt"></i>
+                  <p>{{ car.speed }}{{ 'SPEED_UNIT' | translate }}</p>
+                </div>
+              </li>
+              <li>
+                <div class="item">
+                  <i class="fas fa-road"></i>
+                  <p>{{ car.mileage }}{{ 'MILEAGE_UNIT' | translate }}</p>
+                </div>
+              </li>
+              <li>
+                <div class="item">
+                  <i class="fas fa-gas-pump"></i>
+                  <p>{{ car.fuel }}</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="cta-section">
+      <a routerLink="/car-listing" class="cta-button">{{ 'EXPLORE_MORE_CARS' | translate }}</a>
+    </div>
+  </div>
+  <ng-template #buyerLoader>
+    <div class="loader-container">
+      <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+      <p>{{ 'LOADER' | translate }}</p>
+    </div>
+  </ng-template>
+</section>
+
+<section *ngIf="userRole === 'ROLE_MECHANIC'">
+  <div class="container">
+    <header class="header">
+      <h1>{{ 'MANAGE_INSPECTIONS' | translate }} <span class="highlight">{{ 'VEHICLE_INSPECTIONS' | translate }}</span></h1>
+      <p>{{ 'TRACK_INSPECTIONS' | translate }}</p>
+      <button class="cta-button" (click)="startInspection()">{{ 'START_INSPECTION' | translate }}</button>
+    </header>
+
+    <section class="summary-cards">
+      <div class="card pending">
+        <h3>{{ 'PENDING_INSPECTIONS' | translate }}</h3>
+        <p>{{ pendingCars.length }} {{ 'VEHICLES' | translate }}</p>
+      </div>
+      <div class="card certified">
+        <h3>{{ 'CERTIFIED_VEHICLES' | translate }}</h3>
+        <p>{{ certifiedCars.length }} {{ 'VEHICLES' | translate }}</p>
+      </div>
+    </section>
+
+    <section *ngIf="loading" class="loading">
+      <mat-spinner></mat-spinner>
+    </section>
+
+    <section class="vehicle-list" *ngIf="!loading && pendingCars.length > 0; else noPendingCars">
+      <h2>{{ 'ASSIGNED_VEHICLES' | translate }}</h2>
+      <table mat-table [dataSource]="pendingCars" class="mat-elevation-z1">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> {{ 'ID' | translate }} </th>
+          <td mat-cell *matCellDef="let car"> {{ car.id }} </td>
+        </ng-container>
+        <ng-container matColumnDef="brand">
+          <th mat-header-cell *matHeaderCellDef> {{ 'VEHICLE' | translate }} </th>
+          <td mat-cell *matCellDef="let car"> {{ car.brand }} {{ car.model }} </td>
+        </ng-container>
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef> {{ 'MODEL' | translate }} </th>
+          <td mat-cell *matCellDef="let car"> {{ car.year }} </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef> {{ 'STATUS' | translate }} </th>
+          <td mat-cell *matCellDef="let car"> {{ car.status }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['id', 'brand', 'year', 'status']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id','brand', 'year', 'status'];"></tr>
+      </table>
+    </section>
+
+    <ng-template #noPendingCars>
+      <p>{{ 'NO_PENDING_VEHICLES' | translate }}</p>
+    </ng-template>
+
+    <section class="vehicle-list" *ngIf="!loading && certifiedCars.length > 0; else noCertifiedCars">
+      <h2>{{ 'CERTIFIED_VEHICLES' | translate }}</h2>
+      <table mat-table [dataSource]="reviews" class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> {{ 'ID' | translate }} </th>
+          <td mat-cell *matCellDef="let review"> {{ review.vehicle.id }} </td>
+        </ng-container>
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef> {{ 'NOTES' | translate }} </th>
+          <td mat-cell *matCellDef="let review"> {{ review.notes }} </td>
+        </ng-container>
+        <ng-container matColumnDef="vehicle">
+          <th mat-header-cell *matHeaderCellDef> {{ 'STATUS' | translate }} </th>
+          <td mat-cell *matCellDef="let review"> {{ review.vehicle?.status }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['id', 'notes', 'vehicle']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['id', 'notes', 'vehicle'];"></tr>
+      </table>
+    </section>
+
+    <ng-template #noCertifiedCars>
+      <p>{{ 'NO_CERTIFIED_VEHICLES' | translate }}</p>
+    </ng-template>
+  </div>
+</section>

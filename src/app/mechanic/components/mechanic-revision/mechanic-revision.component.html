@@ -1,0 +1,61 @@
+<div *ngIf="loading" class="loader-container">
+  <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  <p>{{ 'LOADER' | translate }}</p>
+</div>
+
+<div class="container" *ngIf="!loading">
+  <div *ngIf="pendingCars.length === 0">
+    <p>{{ 'NO_CARS_PENDING_REVIEW' | translate }}</p>
+  </div>
+
+  <div *ngFor="let car of pendingCars">
+    <mat-card class="card">
+      <div class="row">
+        <div class="col-50 image-column">
+          <div class="car-gallery">
+            <img [src]="car.mainImage || car.imageUrl || 'assets/default_image.jpg'" alt="{{ car.brand }} {{ car.model }}">
+          </div>
+        </div>
+
+        <div class="col-50">
+          <div class="car-data">
+            <div class="column-list">
+              <ul>
+                <li><i class="material-symbols-outlined">event</i><span>{{ car.year }}</span></li>
+                <li><i class="material-symbols-outlined">auto_transmission</i><span>{{ car.transmission }}</span></li>
+                <li><i class="material-symbols-outlined">bolt</i><span>{{ car.engine }}</span></li>
+              </ul>
+            </div>
+            <div class="column-list">
+              <ul>
+                <li><i class="material-symbols-outlined">invert_colors</i><span>{{ car.color }}</span></li>
+                <li><i class="material-symbols-outlined">road</i><span>{{ car.mileage }}</span></li>
+                <li><i class="material-symbols-outlined">attach_money</i><span>{{ car.price | currency }}</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="checkbox-container">
+            <label class="checkbox-label">
+              <input type="checkbox" class="styled-checkbox" />
+              <span class="custom-checkbox"></span>
+              {{ 'APPROVED' | translate }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="review-section">
+          <p><strong>{{ 'REVIEW_DOCUMENT' | translate }}</strong></p>
+          <textarea [(ngModel)]="car.reviewNotes" placeholder="{{ 'REVIEW_NOTES_PLACEHOLDER' | translate }}"></textarea>
+        </div>
+
+        <button mat-button color="primary" (click)="createCarReview(car, car.reviewNotes || '')">
+  {{ 'CREATE_REVIEW' | translate }}
+</button>
+
+      </div>
+    </mat-card>
+  </div>
+</div>

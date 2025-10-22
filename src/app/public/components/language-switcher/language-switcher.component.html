@@ -1,0 +1,14 @@
+<div class="language-selector">
+  <button mat-button [matMenuTriggerFor]="languageMenu">
+    <img *ngIf="currentLang === 'es'" src="assets/spanish-flag.webp" alt="Spanish" class="flag-icon">
+    <img *ngIf="currentLang === 'en'" src="assets/english-flag.webp" alt="English" class="flag-icon">
+  </button>
+  <mat-menu #languageMenu="matMenu">
+    <button mat-menu-item (click)="useLanguage('es')">
+      <img src="assets/spanish-flag.webp" alt="Spanish" class="flag-icon"> Español
+    </button>
+    <button mat-menu-item (click)="useLanguage('en')">
+      <img src="assets/english-flag.webp" alt="English" class="flag-icon"> English
+    </button>
+  </mat-menu>
+</div>

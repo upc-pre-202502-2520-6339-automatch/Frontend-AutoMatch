@@ -1,0 +1,43 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100vh;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+}
+
+.car-image {
+  max-width: 400px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 3rem;
+  color: #ffcc00;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #b0b0b0;
+}
+
+.back-home-btn {
+  text-decoration: none;
+  background-color: #ffcc00;
+  color: #1e1e1e;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.back-home-btn:hover {
+  background-color: #e0b800;
+  transform: scale(1.05);
+}

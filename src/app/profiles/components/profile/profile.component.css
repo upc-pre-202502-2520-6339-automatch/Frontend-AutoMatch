@@ -1,0 +1,351 @@
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.profile-background {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  animation: fadeInUp 1s ease;
+
+}
+
+.profile-banner {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1139px;
+  height: 180px;
+  animation: fadeIn 1s ease;
+
+}
+
+.profile-info-edit-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-button {
+  margin-left: 20px;
+  white-space: nowrap;
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 1100px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  position: relative;
+  margin-top: 40px;
+  animation: slideInUp 0.7s ease;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.profile-picture {
+  position: relative;
+  z-index: 3;
+  border: 4px solid white;
+  border-radius: 50%;
+  margin-top: -90px;
+}
+
+.profile-picture img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-header-info {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.profile-header-info .profile-role {
+  color: #777;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.role-icon, .email-icon, .subscription-icon {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.email, .subscription, .role {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.subscription {
+  color: #777;
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.profile-name {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 24px;
+  background: linear-gradient(
+    to right,
+    #0044cc 20%,
+    #00aaff 40%,
+    #ffd700 60%,
+    #ffcc00 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-fill-color: transparent;
+  background-size: 500% auto;
+  animation: textShine 5s ease-in-out infinite alternate;
+}
+
+.profile-divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+.profile-details h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.profile-info-row {
+  display: flex;
+  text-align: left;
+}
+
+.profile-info-item p {
+  color: #333;
+  margin-right: 180px;
+}
+
+.profile-payment-methods h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.payment-methods-container {
+  margin-left: 40px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.bank-logo {
+  width: 60%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.bank-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.payment-info p {
+  margin: 0;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+button[mat-raised-button] {
+  width: 10%;
+  margin-top: 20px;
+  font-size: 1rem;
+  background-color: #f4c854;
+  color: #fff;
+}
+
+button[mat-raised-button]:hover {
+  background-color: #f4c854;
+}
+
+.payment-method-edit {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.payment-edit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button.delete-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: none;
+}
+
+.payment-methods-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .profile-card {
+    margin-top: -100px;
+  }
+
+  .profile-banner {
+    display: none;
+  }
+
+  .profile-picture {
+    margin: 0 auto;
+  }
+
+  .profile-info-edit-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-header-info {
+    text-align: center;
+  }
+
+  .edit-button {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-info-edit-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-picture {
+    margin: 0 auto;
+  }
+
+  .profile-header-info {
+    text-align: center;
+  }
+
+  .profile-info-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .payment-methods-container {
+    margin: 0 auto;
+  }
+
+  .payment-method {
+    width: 100%;
+  }
+
+  .profile-card {
+    margin-top: -70px;
+  }
+
+  .bank-logo {
+    width: 40%;
+    margin-right: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-picture {
+    margin: 0 auto;
+  }
+
+  .profile-card {
+    margin-top: -30px;
+  }
+
+  .profile-header-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-info-item p {
+    margin-right: 20px;
+    font-size: 0.9rem;
+  }
+
+  .payment-method {
+    width: 100%;
+  }
+}

@@ -1,0 +1,169 @@
+
+<div *ngIf="loading" class="loader-container">
+  <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  <p>{{ 'LOADER' | translate }}</p>
+</div>
+<div *ngIf="!loading">
+<section class="profile-background">
+
+
+  <div class="profile-banner">
+    <img src="assets/background-profile.png" alt="Background Banner" class="banner-image">
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="profile-picture">
+        <img *ngIf="imagePreview" [src]="imagePreview" alt="{{ userData.firstName }} {{ userData.lastName }}">
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <div class="profile-info-edit-container">
+        <div class="profile-header-info">
+          <h2 *ngIf="!editMode" class="profile-name">{{ userData.firstName }} {{ userData.lastName }}</h2>
+          <div *ngIf="editMode">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
+              <input matInput [(ngModel)]="userData.firstName" placeholder="{{ 'FIRST_NAME_PLACEHOLDER' | translate }}">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
+              <input matInput [(ngModel)]="userData.lastName" placeholder="{{ 'LAST_NAME_PLACEHOLDER' | translate }}">
+            </mat-form-field>
+          </div>
+          <p class="profile-role">
+            <span class="role">
+            <span class="material-symbols-outlined role-icon">
+            {{  currentRole === 'ROLE_SELLER' ? 'store' :
+              currentRole === 'ROLE_MECHANIC' ? 'build' :
+                currentRole === 'ROLE_BUYER' ? 'car_tag' : 'person' }}
+            </span>
+              {{ getRoleDisplayName(currentRole) }}
+                </span>
+            <span class="email">
+            <span class="material-symbols-outlined email-icon">email</span>
+              {{ userData.email }}
+            </span>
+            <ng-container *ngIf="currentRole === 'ROLE_SELLER' && subscriptionData">
+              <span class="subscription">
+                <span class="material-symbols-outlined subscription-icon">credit_card</span>
+                {{ subscriptionData.description | translate  }}
+              </span>
+            </ng-container>
+          </p>
+        </div>
+        <button mat-raised-button color="primary" class="edit-button" (click)="editMode ? onSave() : toggleEditMode()">
+          {{ editMode ? ('SAVE' | translate) : ('EDIT' | translate) }}
+        </button>
+      </div>
+
+      <hr class="profile-divider">
+      <h3 class="personal-data">{{ 'PERSONAL_DATA' | translate }}</h3>
+      <div class="profile-info-row">
+        <div class="profile-info-item">
+          <p><strong>{{ 'DNI' | translate }}</strong></p>
+          <p>{{ userData.dni }}</p>
+        </div>
+        <div class="profile-info-item">
+          <p><strong>{{ 'PHONE' | translate }}</strong></p>
+          <p>{{ userData.phone }}</p>
+        </div>
+        <div class="profile-info-item">
+          <p><strong>{{ 'ADDRESS' | translate }}</strong></p>
+          <p>{{ userData.address }}</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="profile-divider">
+
+    <ng-container *ngIf="currentRole === 'ROLE_BUYER'">
+      <div class="profile-payment-methods">
+        <h3>{{ 'RECENT_FAVORITES' | translate }}</h3>
+        <div class="payment-methods-container">
+          <div *ngFor="let favorite of recentFavorites" class="payment-method" (click)="navigateToCarDetails(favorite.vehicle.id)">
+            <div class="bank-logo">
+              <img [src]="favorite.vehicle.images[0]" alt="{{ favorite.vehicle.name }}" class="img-thumbnail">
+            </div>
+            <div class="payment-info">
+              <p>{{ favorite.vehicle.brand }} {{ favorite.vehicle.model }}</p>
+              <p>{{ favorite.vehicle.price | currency }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="currentRole === 'ROLE_SELLER'">
+      <div class="profile-payment-methods">
+        <h3>{{ 'PAYMENT_METHODS' | translate }}</h3>
+
+        <div class="payment-methods-container" *ngIf="!editMode && userData.paymentMethods && userData.paymentMethods.length > 0">
+          <div *ngFor="let method of userData.paymentMethods" class="payment-method">
+            <div class="bank-logo">
+              <img *ngIf="method.type === 'BBVA'" src="assets/bbva.jpg" alt="BBVA">
+              <img *ngIf="method.type === 'BCP'" src="assets/bcp.jpg" alt="BCP">
+              <img *ngIf="method.type === 'Scotiabank'" src="assets/scotiabank.png" alt="Scotiabank">
+              <img *ngIf="method.type === 'Interbank'" src="assets/interbank.jpg" alt="Interbank">
+              <img *ngIf="method.type === 'Banco de la Nación'" src="assets/bn.jpg" alt="Banco de la Nación">
+            </div>
+            <div class="payment-info">
+              <p>{{ method.type }}</p>
+              <p><strong>{{ 'ACCOUNT_NUMBER' | translate }}:</strong> {{ method.details }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="editMode" class="payment-methods-container">
+          <div *ngFor="let method of userData.paymentMethods; let i = index" class="payment-method-edit">
+            <ng-container *ngIf="!method.markedForDeletion">
+              <div class="payment-edit-fields">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'TYPE' | translate }}</mat-label>
+                  <mat-select [(ngModel)]="method.type" placeholder="{{ 'SELECT_BANK_TYPE' | translate }}">
+                    <mat-option value="BBVA">BBVA</mat-option>
+                    <mat-option value="BCP">BCP</mat-option>
+                    <mat-option value="Scotiabank">Scotiabank</mat-option>
+                    <mat-option value="Interbank">Interbank</mat-option>
+                    <mat-option value="Banco de la Nación">Banco de la Nación</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'ACCOUNT_NUMBER' | translate }}</mat-label>
+                  <input matInput [(ngModel)]="method.details" placeholder="{{ 'ACCOUNT_NUMBER_PLACEHOLDER' | translate }}">
+                </mat-form-field>
+              </div>
+
+              <button mat-icon-button color="warn" (click)="markForDeletion(i)" class="delete-button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-container>
+          </div>
+          <button mat-raised-button color="primary" class="add-payment-button" (click)="handleAddPaymentClick()">
+            {{ 'ADD' | translate }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="currentRole === 'ROLE_MECHANIC'">
+      <div class="profile-payment-methods">
+        <h3>{{ 'RECENT_REVIEWS' | translate }}</h3>
+        <div class="payment-methods-container">
+          <div *ngFor="let review of recentReviews" class="payment-method">
+            <div class="bank-logo">
+              <img *ngIf="review.vehicleImage" [src]="review.vehicleImage" alt="{{ review.vehicle.name }}" class="img-thumbnail">
+            </div>
+            <div class="payment-info">
+              <p><strong></strong> {{ review.vehicle.brand }} {{ review.vehicle.model }}</p>
+              <p><strong></strong> {{ review.vehicle.status }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>
+</div>
