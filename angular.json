@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend-car2go": {
+    "frontend-Automatch": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/frontend-car2go",
+            "outputPath": "dist/frontend-Automatch",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend-car2go:build:production"
+              "buildTarget": "frontend-Automatch:build:production"
             },
             "development": {
-              "buildTarget": "frontend-car2go:build:development"
+              "buildTarget": "frontend-Automatch:build:development"
             }
           },
           "defaultConfiguration": "development"

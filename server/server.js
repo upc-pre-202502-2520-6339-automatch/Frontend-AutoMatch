@@ -1,5 +1,5 @@
 // =======================================================
-// 🌐 Fake API for Car2Go - Compatible with Angular Frontend
+// 🌐 Fake API for Automatch - Compatible with Angular Frontend
 // =======================================================
 import jsonServer from 'json-server';
 import cors from 'cors';
@@ -97,7 +97,7 @@ server.post('/profiles', (req, res) => {
 // Obtener perfil actual del usuario autenticado
 server.get('/profiles/me', (req, res) => {
   const db = router.db;
-  
+
   // Simular sesión del usuario 1
   const userId = 1;
 

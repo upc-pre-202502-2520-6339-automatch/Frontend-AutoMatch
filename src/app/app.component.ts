@@ -9,7 +9,7 @@ import { DisplayService } from './public/pages/service/display.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'frontend-car2go';
+  title = 'frontend-Automatch';
   showToolbar: boolean = true;
   showFooter: boolean = true;
 
