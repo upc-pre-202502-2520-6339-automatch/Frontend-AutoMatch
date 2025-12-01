@@ -1,15 +1,30 @@
-<!-- messaging/pages/chat-thread/chat-thread.component.html -->
 <div class="chat-thread">
+  <!-- Header del chat -->
+  <div class="chat-header">
+    <div class="chat-avatar">
+      <span class="material-symbols-outlined">directions_car</span>
+    </div>
+    <div class="chat-header-info">
+      <h2 class="chat-title">Chat con vendedor</h2>
+      <p class="chat-subtitle">Negocia los detalles del vehículo en tiempo real</p>
+    </div>
+  </div>
 
+  <!-- Zona de mensajes -->
   <div class="messages-container">
     <ng-container *ngIf="!loading; else loadingTpl">
       <app-message-list [messages]="messages"></app-message-list>
     </ng-container>
+
     <ng-template #loadingTpl>
-      <p>Cargando mensajes...</p>
+      <div class="chat-loading">
+        <div class="spinner"></div>
+        <p>Cargando mensajes...</p>
+      </div>
     </ng-template>
   </div>
 
+  <!-- Input -->
   <div class="input-container">
     <app-message-input (send)="onSend($event)"></app-message-input>
   </div>

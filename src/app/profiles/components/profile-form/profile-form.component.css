@@ -1,215 +1,143 @@
-body {
-  overflow-y: unset;
-  font-family: 'Arial', sans-serif;
-  background-color: #ffffff;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.container {
+/* Contenedor general de la página */
+.profile-form-page {
+  min-height: calc(100vh - 120px); /* deja espacio para navbar/footer */
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f9f9f9;
-  animation: fadeInUp 1s ease;
+  justify-content: center;
+  padding: 40px 16px;
+  background: #f3f4f6; /* gris suave */
 }
 
-.profile-container {
-  max-width: 700px;
-  margin: 0 auto;
+/* Card principal */
+.profile-form-card {
+  position: relative;
   width: 100%;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 0.7s ease;
+  max-width: 720px;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  padding: 28px 26px 30px;
+  border-top: 4px solid #ffc400; /* amarillo AutoMatch */
 }
 
-.profile-form {
+/* Header */
+.profile-form-header {
+  margin-bottom: 18px;
+}
+
+.profile-form-title {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #111827; /* casi negro */
+}
+
+.profile-form-subtitle {
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  color: #6b7280; /* gris medio */
+}
+
+/* Layout del formulario */
+.profile-form-grid {
   display: grid;
-  gap: 15px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
 }
 
-.form-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
+/* Campos */
+.field {
+  width: 100%;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+/* Forzar ciertos campos a ocupar 2 columnas */
+.full-width-field {
+  grid-column: 1 / -1;
 }
 
-label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
-  transition: color 0.3s ease;
+/* Afinar margenes de los mat-form-field */
+.profile-form-card .mat-mdc-form-field {
+  width: 100%;
 }
 
-.form-control {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  background-color: #fff;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Sección de Seller */
+.seller-section {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.form-control:focus {
-  border-color: #007bff;
-  outline: none;
-  box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+.section-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
 }
 
-.form-control-file {
-  padding: 5px;
-  font-size: 14px;
+.section-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #6b7280;
 }
 
-.image-preview-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  margin-top: 15px;
-  animation: fadeIn 1s ease;
-}
-
-.image-preview-wrapper {
-  position: relative;
-}
-
-.image-preview {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 1.2s ease;
-}
-
-.delete-icon {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: #ff4d4d;
-  color: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.delete-icon:hover {
-  background-color: #ff1a1a;
-  transform: rotate(15deg);
-}
-
+/* Acciones */
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  margin-top: 4px;
 }
 
-.submit-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+/* Botón principal, usando el azul que ya tienes en otros botones */
+.btn-primary {
+  padding: 0.6rem 1.8rem;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35); /* azul */
+  text-transform: none;
 }
 
-.submit-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
-}
-
-.submit-button:disabled {
-  background-color: #ccc;
-}
-
-.new-images button {
-  border: none;
-  display: flex;
-  padding: 0.5rem 1rem;
-  background-color: #488aec;
-  color: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-align: center;
-  cursor: pointer;
-  text-transform: uppercase;
-  align-items: center;
-  border-radius: 0.5rem;
-  user-select: none;
-  gap: 0.5rem;
-  box-shadow: 0 4px 6px -1px #488aec31, 0 2px 4px -1px #488aec17;
-  transition: all 0.3s ease;
-}
-
-.new-images button:hover {
-  box-shadow: 0 10px 15px -3px #488aec4f, 0 4px 6px -2px #488aec17;
-  transform: translateY(-2px);
-}
-
-.new-images button:focus,
-.new-images button:active {
-  opacity: 0.85;
+.btn-primary[disabled] {
   box-shadow: none;
 }
 
-.new-images button svg {
-  width: 1.25rem;
-  height: 1.25rem;
+/* Mensaje de error */
+.error-message {
+  margin-top: 4px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.9rem;
 }
 
-.hidden-file-input {
-  display: none;
+/* Overlay de carga dentro de la card */
+.overlay-loading {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-h3 {
-  color: #333;
-  font-weight: bold;
-  font-size: 1.5rem;
-  animation: fadeInDown 0.8s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeInDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
+/* Responsive */
+@media (max-width: 768px) {
+  .profile-form-card {
+    padding: 22px 18px 24px;
   }
-  .profile-container {
-    margin-top: 200px;
+
+  .profile-form-grid {
+    grid-template-columns: 1fr;
   }
-  .submit-button, .cancel-button {
+
+  .btn-primary {
     width: 100%;
-    padding: 10px;
+    justify-content: center;
+  }
+
+  .form-actions {
+    margin-top: 10px;
   }
 }

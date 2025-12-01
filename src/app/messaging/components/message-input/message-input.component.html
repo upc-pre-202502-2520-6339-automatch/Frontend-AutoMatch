@@ -4,10 +4,16 @@
     [(ngModel)]="text"
     (keydown)="onKeyDown($event)"
     rows="2"
+    class="message-textarea"
     placeholder="Escribe un mensaje..."
   ></textarea>
 
-  <button type="button" (click)="onSend()">
-    Enviar
+  <button
+    type="button"
+    class="send-button"
+    (click)="onSend()"
+    [disabled]="!text.trim()"
+  >
+    <span class="material-symbols-outlined">send</span>
   </button>
 </div>

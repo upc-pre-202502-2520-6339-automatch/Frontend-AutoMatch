@@ -1,39 +1,87 @@
-<div *ngIf="vehicle as v" class="car-details">
-  <img
-    class="details-image"
-    [src]="v.mainImageUrl || 'assets/images/cars/default-car.png'"
-    alt="Imagen de {{ v.brand }} {{ v.model }}"
-  />
+<div class="car-details-page">
+  <ng-container *ngIf="vehicle as v; else errorTpl">
+    <div class="car-details-card">
+      <div class="car-main">
+        <div class="image-wrapper">
+          <img
+            class="details-image"
+            [src]="v.mainImageUrl || 'assets/images/cars/default-car.png'"
+            alt="Imagen de {{ v.brand }} {{ v.model }}"
+          />
+        </div>
 
-  <h2>{{ v.brand }} {{ v.model }}</h2>
-  <p>{{ v.year }} · {{ v.mileageKm | number }} km · {{ v.plate }}</p>
-  <p class="price">
-    {{ v.priceAmount | currency: v.priceCurrency }}
-  </p>
-  <p class="status">
-    Estado: {{ v.status }}
-  </p>
+        <div class="info-wrapper">
+          <div class="title-row">
+            <div>
+              <h2 class="car-title">{{ v.brand }} {{ v.model }}</h2>
+              <p class="car-meta">
+                {{ v.year }} · {{ v.mileageKm | number }} km · {{ v.plate }}
+              </p>
+            </div>
+
+            <span
+              class="status-pill"
+              [ngClass]="{
+                'status-available': v.status === 'AVAILABLE',
+                'status-under-review': v.status === 'UNDER_REVIEW',
+                'status-sold': v.status === 'SOLD'
+              }"
+            >
+              {{ v.status | titlecase }}
+            </span>
+          </div>
+
+          <div class="price-section">
+            <span class="price-label">Price</span>
+            <div class="price-value">
+              {{ v.priceAmount | currency: v.priceCurrency }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="actions-row" *ngIf="canReserveOrBuy || canPublish">
+        <!-- Acciones buyer -->
+        <div class="buyer-actions" *ngIf="canReserveOrBuy">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="onReserveOrBuy()"
+            [disabled]="loading"
+          >
+            Reservar / Comprar
+          </button>
+
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="openChatWithSeller()"
+            [disabled]="loading"
+            class="chat-button"
+          >
+            Chatear con el vendedor
+          </button>
+        </div>
+
+        <!-- Acción seller -->
+        <div class="seller-actions" *ngIf="canPublish">
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="onPublishListing()"
+            [disabled]="loading"
+          >
+            Publicar anuncio
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #errorTpl>
+    <div *ngIf="!loading && error" class="error">
+      {{ error }}
+    </div>
+  </ng-template>
 </div>
-
-<div *ngIf="!vehicle && !loading && error" class="error">
-  {{ error }}
-</div>
-
-
-<!-- ... tus datos del vehículo ... -->
-
-<div class="actions">
-  <button mat-raised-button color="primary" (click)="onReserveOrBuy()" [disabled]="!vehicle || loading">
-    Reservar / Comprar
-  </button>
-</div>
-
-
-<!-- Ejemplo dentro del detalle, sección botones de acción -->
-<div class="action-buttons">
-  <!-- tu botón existente de oferta/compra -->
-  <button (click)="openChatWithSeller()" class="chat-button">
-    Chatear con el vendedor
-  </button>
-</div>
-

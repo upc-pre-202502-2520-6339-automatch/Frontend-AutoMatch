@@ -1,6 +1,9 @@
-<!-- message-list.component.html -->
 <div class="message-list">
-  <div *ngFor="let m of messages" class="message-item">
+  <div
+    *ngFor="let m of messages"
+    class="message-item"
+    [ngClass]="isMine(m) ? 'message-item--own' : 'message-item--other'"
+  >
     <div class="message-content">
       {{ m.content }}
     </div>

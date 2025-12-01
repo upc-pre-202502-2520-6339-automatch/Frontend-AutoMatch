@@ -1,24 +1,243 @@
+/* Fondo general */
+.notification-detail-page {
+  min-height: calc(100vh - 120px);
+  padding: 40px 16px 48px;
+  background: #f3f4f6;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card principal */
 .notification-detail-card {
-  padding: 16px;
-  border-radius: 8px;
+  width: 100%;
+  max-width: 900px;
   background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  border-radius: 22px;
+  padding: 22px 24px 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border-top: 4px solid #ffc400; /* amarillo AutoMatch */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.message-box {
-  background: #f5f5f5;
-  padding: 12px;
-  border-radius: 6px;
-  white-space: pre-wrap;
+/* Header superior */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
 }
 
-.back-link {
-  display: inline-block;
-  margin-top: 16px;
+.back-chip {
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #111827;
+  font-size: 0.85rem;
+  cursor: pointer;
   text-decoration: none;
-  color: #2959ad;
+  transition: background-color 0.15s ease, transform 0.05s ease;
 }
 
-.back-link:hover {
-  text-decoration: underline;
+.back-chip .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.back-chip:hover {
+  background: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.detail-title-block {
+  text-align: right;
+  flex: 1;
+}
+
+.detail-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.detail-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* Estados (loading/error) */
+.state-card {
+  margin-top: 4px;
+  padding: 14px 14px;
+  border-radius: 14px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #4b5563;
+  font-size: 0.93rem;
+}
+
+.state-card .spinner {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2959ad;
+  animation: spin 0.7s linear infinite;
+}
+
+.state-error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.state-error .state-icon {
+  color: #b91c1c;
+}
+
+/* Grid de detalles */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 4px;
+}
+
+.detail-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.field-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.field-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.field-value {
+  color: #111827;
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Badge de status */
+.status-pill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Colores por status */
+.status-sent {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Sección del mensaje */
+.message-section {
+  margin-top: 6px;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.message-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.message-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #111827;
+  color: #f9fafb;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Caja del payload */
+.message-box {
+  background: #0b1020;
+  color: #e5e7eb;
+  padding: 12px 12px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85rem;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.15);
+  max-height: 260px;
+  overflow: auto;
+}
+
+/* Spinner keyframes */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notification-detail-card {
+    padding: 18px 16px 20px;
+    border-radius: 18px;
+  }
+
+  .detail-header {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .detail-title-block {
+    text-align: left;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .field-value {
+    text-align: left;
+  }
 }

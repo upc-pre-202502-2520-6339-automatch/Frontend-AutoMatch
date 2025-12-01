@@ -1,42 +1,134 @@
-<h2>My Sales</h2>
-
-<ng-container *ngIf="salesState$ | async as state; else loadingTpl">
-  <div *ngIf="state.items.length === 0">
-    <p>You don't have sales yet.</p>
-  </div>
-
-  <div class="sale-list" *ngIf="state.items.length > 0">
-    <mat-card *ngFor="let sale of state.items" class="sale-card">
-      <mat-card-title>
-        Sale #{{ sale.id }} – {{ sale.status }}
-      </mat-card-title>
-
-      <mat-card-content>
-        <p>Vehicle ID: {{ sale.vehicleId }}</p>
-        <p>Buyer ID: {{ sale.buyerId }}</p>
-        <p>Amount: {{ sale.priceAmount }} {{ sale.priceCurrency }}</p>
-
-        <p *ngIf="sale.reservationExpiresAt">
-          Reservation expires at:
-          {{ sale.reservationExpiresAt | date:'short' }}
+<div class="sales-page">
+  <!-- Header -->
+  <div class="sales-header">
+    <div class="header-left">
+      <div class="icon-circle">
+        <span class="material-symbols-outlined">paid</span>
+      </div>
+      <div>
+        <h1 class="sales-title">My Sales</h1>
+        <p class="sales-subtitle">
+          Monitor your reservations, completed sales and buyer activity.
         </p>
+      </div>
+    </div>
 
-        <div class="images" *ngIf="sale.images?.length">
-          <img
-            *ngFor="let img of sale.images"
-            [src]="img"
-            alt="vehicle image"
-          />
-        </div>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <!-- Aquí podrías poner acciones futuras del seller, por ahora nada -->
-      </mat-card-actions>
-    </mat-card>
+    <div class="header-right">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="reload-btn"
+        (click)="reload()"
+        [disabled]="loading"
+      >
+        <span class="material-symbols-outlined">refresh</span>
+        <span>Refresh</span>
+      </button>
+    </div>
   </div>
-</ng-container>
 
-<ng-template #loadingTpl>
-  <p>Loading your sales...</p>
-</ng-template>
+  <!-- Contenido principal -->
+  <ng-container *ngIf="salesState$ | async as state; else loadingTpl">
+
+    <!-- Empty state -->
+    <div *ngIf="state.items.length === 0" class="empty-state">
+      <div class="empty-card">
+        <span class="material-symbols-outlined empty-icon">receipt_long</span>
+        <h2>No sales yet</h2>
+        <p>
+          When a buyer reserves or pays for one of your vehicles, your sales
+          will appear here.
+        </p>
+      </div>
+    </div>
+
+    <!-- Lista de ventas -->
+    <div class="sale-list" *ngIf="state.items.length > 0">
+      <mat-card *ngFor="let sale of state.items" class="sale-card">
+
+        <mat-card-title>
+          <div class="sale-card-header">
+            <div>
+              <div class="sale-id">Sale #{{ sale.id }}</div>
+              <div class="sale-sub">
+                Vehicle #{{ sale.vehicleId }} · Buyer #{{ sale.buyerId }}
+              </div>
+            </div>
+
+            <span class="status-pill"
+                  [ngClass]="'status-' + (sale.status | lowercase)">
+              {{ sale.status | titlecase }}
+            </span>
+          </div>
+        </mat-card-title>
+
+        <mat-card-content>
+          <div class="sale-main">
+            <div class="sale-info">
+              <p class="info-line">
+                <span class="label">Amount:</span>
+                <span class="value">
+                  {{ sale.priceAmount | number:'1.2-2' }}
+                  {{ sale.priceCurrency }}
+                </span>
+              </p>
+
+              <p class="info-line" *ngIf="sale.reservationExpiresAt">
+                <span class="label">Reservation expires:</span>
+                <span class="value">
+                  {{ sale.reservationExpiresAt | date:'short' }}
+                </span>
+              </p>
+            </div>
+
+            <div class="sale-images" *ngIf="sale.images?.length">
+              <img
+                *ngFor="let img of sale.images"
+                [src]="img"
+                alt="vehicle image"
+              />
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions class="sale-actions">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="btn-action"
+            disabled
+          >
+            Seller dashboard
+          </button>
+
+          <!-- 👇 nuevo botón para chatear con el comprador -->
+          <button
+            mat-stroked-button
+            color="accent"
+            class="btn-action"
+            *ngIf="sale.buyerId"
+            (click)="openChatWithBuyer(sale)"
+          >
+            <span class="material-symbols-outlined">chat</span>
+            <span>Chat with buyer</span>
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+
+
+
+
+
+
+  </ng-container>
+
+  <!-- Loading -->
+  <ng-template #loadingTpl>
+    <div class="loading-state">
+      <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+      <p>Loading your sales...</p>
+    </div>
+  </ng-template>
+</div>

@@ -1,29 +1,92 @@
-/* message-input.component.css */
+/* Contenedor general del input de mensaje */
 .message-input {
+  padding: 10px 14px;
+  border-top: 1px solid #e5e7eb;
+  background: #f3f4f6;
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 12px;
 }
 
-.message-input textarea {
+/* Textarea */
+.message-textarea {
   flex: 1;
   resize: none;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid #d1d5db;
   font-family: inherit;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.message-input button {
-  padding: 8px 16px;
-  border-radius: 8px;
+.message-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.message-textarea:focus {
+  outline: none;
+  border-color: #2959ad;
+  box-shadow: 0 0 0 1px rgba(41, 89, 173, 0.12),
+  0 12px 28px rgba(15, 23, 42, 0.18);
+  background-color: #ffffff;
+}
+
+/* Botón de enviar */
+.send-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
   border: none;
-  background: #2959ad;
-  color: #fff;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffc400; /* amarillo AutoMatch */
+  color: #111827;
   cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
 }
 
-.message-input button:hover {
-  background: #1f4689;
+.send-button .material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* Hover / active */
+.send-button:hover:not(:disabled) {
+  background: #f5b800;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+}
+
+.send-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+}
+
+/* Deshabilitado */
+.send-button:disabled {
+  cursor: default;
+  background: #e5e7eb;
+  color: #9ca3af;
+  box-shadow: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .message-input {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .message-textarea {
+    font-size: 0.9rem;
+  }
+
+  .send-button {
+    width: 40px;
+    height: 40px;
+  }
 }

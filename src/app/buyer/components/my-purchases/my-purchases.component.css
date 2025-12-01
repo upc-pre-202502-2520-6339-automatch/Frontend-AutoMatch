@@ -1,0 +1,249 @@
+/* Fondo general de la vista */
+.purchases-page {
+  min-height: calc(100vh - 120px); /* espacio para navbar/footer */
+  padding: 40px 16px 48px;
+  background: #f3f4f6; /* gris suave */
+  display: flex;
+  justify-content: center;
+}
+
+/* Panel principal (card grande) */
+.purchases-panel {
+  width: 100%;
+  max-width: 1100px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 24px 26px 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  border-top: 4px solid #ffc400; /* amarillo AutoMatch */
+}
+
+/* Header */
+.purchases-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-circle .material-symbols-outlined {
+  font-size: 26px;
+  color: #ffc400;
+}
+
+.purchases-title {
+  margin: 0;
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.purchases-subtitle {
+  margin: 4px 0 0;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+/* Empty state */
+.empty-state {
+  margin-top: 8px;
+}
+
+.empty-card {
+  width: 100%;
+  background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+  border-radius: 18px;
+  padding: 26px 18px;
+  text-align: center;
+  border: 1px dashed #d1d5db;
+}
+
+.empty-icon {
+  font-size: 40px;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+
+.empty-card h2 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  color: #111827;
+}
+
+.empty-card p {
+  margin: 0;
+  color: #6b7280;
+}
+
+/* Lista de ventas (dentro del panel) */
+.sale-list {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Card de compra */
+.sale-card {
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  border: 1px solid #e5e7eb;
+}
+
+/* Quita padding horizontal extra de mat-card */
+.sale-card .mat-mdc-card-content,
+.sale-card .mat-mdc-card-header,
+.sale-card .mat-mdc-card-actions {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Cabecera de la card */
+.sale-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.sale-id {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Badge de estado */
+.status-pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Colores por estado */
+.status-reserved {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-payment_pending {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-paid {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-cancelled {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Contenido de la card */
+.sale-main {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 6px;
+}
+
+.sale-info {
+  flex: 1;
+}
+
+.info-line {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+}
+
+.info-line .label {
+  color: #6b7280;
+  margin-right: 6px;
+}
+
+.info-line .value {
+  color: #111827;
+  font-weight: 500;
+}
+
+/* Imágenes */
+.sale-images {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.sale-images img {
+  width: 80px;
+  height: 56px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+}
+
+/* Acciones */
+.sale-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+.btn-action {
+  text-transform: none;
+  font-weight: 600;
+}
+
+/* Loading */
+.loading-state {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .purchases-panel {
+    padding: 20px 16px 22px;
+    border-radius: 18px;
+  }
+
+  .sale-main {
+    flex-direction: column;
+  }
+
+  .sale-images {
+    justify-content: flex-start;
+  }
+
+  .sale-card {
+    border-radius: 14px;
+  }
+
+  .sale-actions {
+    justify-content: stretch;
+  }
+
+  .btn-action {
+    flex: 1;
+  }
+}

@@ -1,20 +1,107 @@
-<div class="car-card" *ngFor="let vehicle of vehicles" (click)="goToDetails(vehicle)">
-  <img
-    class="car-image"
-    [src]="vehicle.mainImageUrl || 'assets/images/cars/default-car.png'"
-    alt="Imagen de {{ vehicle.brand }} {{ vehicle.model }}"
-  />
+<div class="car-list-page">
+  <div class="car-list-header">
+    <div class="header-left">
+      <div class="icon-circle">
+        <span class="material-symbols-outlined">directions_car</span>
+      </div>
+      <div>
+        <h1 class="car-list-title">Available cars</h1>
+        <p class="car-list-subtitle">
+          Explore vehicles that are ready to reserve and buy on AutoMatch.
+        </p>
+      </div>
+    </div>
 
-  <div class="car-info">
-    <h3>{{ vehicle.brand }} {{ vehicle.model }}</h3>
-    <p class="car-meta">
-      {{ vehicle.year }} · {{ vehicle.mileageKm | number }} km · {{ vehicle.plate }}
-    </p>
-    <p class="price">
-      {{ vehicle.priceAmount | currency: vehicle.priceCurrency }}
-    </p>
-    <span class="status-chip" *ngIf="vehicle.status">
-      {{ vehicle.status }}
-    </span>
+    <div class="header-right">
+      <span class="badge-available">
+        Showing only <strong>AVAILABLE</strong> listings
+      </span>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading vehicles...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!loading && error" class="error-state">
+    <span class="material-symbols-outlined">error</span>
+    <span>{{ error }}</span>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && !error && vehicles.length === 0" class="empty-state">
+    <div class="empty-card">
+      <span class="material-symbols-outlined empty-icon">garage</span>
+      <h2>No cars available</h2>
+      <p>
+        When sellers publish new vehicles, you will see them listed here.
+      </p>
+    </div>
+  </div>
+
+  <!-- Grid de autos -->
+  <div
+    *ngIf="!loading && !error && vehicles.length > 0"
+    class="car-grid"
+  >
+    <article
+      class="car-card"
+      *ngFor="let vehicle of vehicles"
+      (click)="goToDetails(vehicle)"
+    >
+      <div class="car-image-wrapper">
+        <img
+          class="car-image"
+          [src]="vehicle.mainImageUrl || 'assets/images/cars/default-car.png'"
+          alt="Imagen de {{ vehicle.brand }} {{ vehicle.model }}"
+        />
+
+        <span
+          *ngIf="vehicle.status"
+          class="status-chip"
+          [ngClass]="{
+            'status-available': vehicle.status === 'AVAILABLE',
+            'status-under-review': vehicle.status === 'UNDER_REVIEW',
+            'status-reserved': vehicle.status === 'RESERVED'
+          }"
+        >
+          {{ vehicle.status | titlecase }}
+        </span>
+      </div>
+
+      <div class="car-info">
+        <h3 class="car-title">
+          {{ vehicle.brand }} {{ vehicle.model }}
+        </h3>
+
+        <p class="car-meta">
+          {{ vehicle.year }} ·
+          {{ vehicle.mileageKm | number }} km ·
+          {{ vehicle.plate }}
+        </p>
+
+        <p class="car-price">
+          {{ vehicle.priceAmount | currency: vehicle.priceCurrency }}
+        </p>
+
+        <div class="car-footer">
+          <div class="chip">
+            <span class="material-symbols-outlined chip-icon">
+              local_gas_station
+            </span>
+            <span>Good condition</span>
+          </div>
+          <div class="chip secondary">
+            <span class="material-symbols-outlined chip-icon">
+              schedule
+            </span>
+            <span>Ready to reserve</span>
+          </div>
+        </div>
+      </div>
+    </article>
   </div>
 </div>

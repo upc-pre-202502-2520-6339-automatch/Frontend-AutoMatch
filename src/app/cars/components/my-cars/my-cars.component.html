@@ -1,73 +1,118 @@
-<div class="car-wrapper">
-  <div *ngIf="loading" class="loader-container">
+<div class="my-cars-page">
+  <!-- Header -->
+  <div class="my-cars-header">
+    <div class="header-left">
+      <div class="icon-circle">
+        <span class="material-symbols-outlined">garage</span>
+      </div>
+      <div>
+        <h1 class="my-cars-title">{{ 'MY_CARS' | translate }}</h1>
+        <p class="my-cars-subtitle">
+          {{ 'CARS_LISTED_MESSAGE' | translate }}
+        </p>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <a routerLink="/car-listing-form" class="cta-button-top">
+        + {{ 'CREATE_NEW_CAR' | translate }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-state">
     <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
     <p>{{ 'LOADER' | translate }}</p>
   </div>
 
-  <div *ngIf="!loading">
-    <div *ngIf="cars.length > 0" class="car-header">
-      <div class="icon-wrapper">
-        <div class="icon-circle">
-          <i class="fa fa-car"></i>
-        </div>
-        <div class="header-underline"></div>
-      </div>
-      <div class="text-content">
-        <h2>{{ 'MY_CARS' | translate }}</h2>
-        <span>{{ 'CARS_LISTED_MESSAGE' | translate }}</span>
+  <!-- Contenido -->
+  <ng-container *ngIf="!loading">
+    <!-- Empty state -->
+    <div *ngIf="cars.length === 0" class="empty-state">
+      <div class="empty-card">
+        <span class="material-symbols-outlined empty-icon">directions_car</span>
+        <h2>{{ 'NO_CARS_LISTED' | translate }}</h2>
+        <p>
+          {{ 'NO_CARS_LISTED' | translate }}
+          <a routerLink="/car-listing-form">
+            {{ 'CREATE_NEW_CAR' | translate }}
+          </a>
+        </p>
       </div>
     </div>
 
-    <div class="car-container">
-      <div *ngIf="cars.length === 0" class="no-cars-message">
-        <div class="icon-wrapper">
-          <i class="fa fa-heart-broken"></i>
-        </div>
-        <p>
-          {{ 'NO_CARS_LISTED' | translate }}
-          <a routerLink="/car-listing-form">{{ 'CREATE_NEW_CAR' | translate }}</a>.
-        </p>
-      </div>
+    <!-- Grid de autos -->
+    <div *ngIf="cars.length > 0" class="cars-grid">
+      <article
+        class="car-card"
+        *ngFor="let car of cars"
+        (click)="navigateToCarDetails(car.id)"
+      >
+        <div class="car-image-wrapper">
+          <img
+            [src]="car.mainImageUrl || defaultImage"
+            alt="{{ car.brand }} {{ car.model }}"
+            class="car-image"
+          />
 
-      <div *ngFor="let car of cars" class="car-item" (click)="navigateToCarDetails(car.id)">
-        <div class="thumb-content">
-          <div class="thumb-inner">
-            <div class="image-wrapper">
-              <img
-                [src]="car.mainImageUrl || defaultImage"
-                alt="{{ car.brand }} {{ car.model }}"
-                class="img-thumbnail"
-              />
+          <!-- status chip -->
+          <span
+            class="status-chip"
+            [ngClass]="{
+              'status-available': car.status === 'AVAILABLE',
+              'status-under-review': car.status === 'UNDER_REVIEW',
+              'status-reserved': car.status === 'RESERVED',
+              'status-sold': car.status === 'SOLD'
+            }"
+          >
+            {{ car.status | titlecase }}
+          </span>
+
+          <!-- delete button -->
+          <button
+            class="delete-button"
+            (click)="deleteCar(car.id); $event.stopPropagation()"
+            mat-icon-button
+            type="button"
+          >
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
+
+        <div class="car-body">
+          <div class="car-header-row">
+            <h3 class="car-title">
+              {{ car.brand }} {{ car.model }}
+            </h3>
+          </div>
+
+          <p class="car-meta">
+            {{ car.year }} ·
+            {{ car.mileageKm | number }} km ·
+            {{ car.plate }}
+          </p>
+
+          <p class="car-price">
+            {{ car.priceAmount | currency: car.priceCurrency }}
+          </p>
+
+          <div class="car-footer">
+            <div class="info-pill">
+              <span class="material-symbols-outlined pill-icon">
+                calendar_month
+              </span>
+              <span>{{ car.year }}</span>
+            </div>
+            <div class="info-pill secondary">
+              <span class="material-symbols-outlined pill-icon">
+                speed
+              </span>
+              <span>{{ car.mileageKm | number }} km</span>
             </div>
           </div>
         </div>
-        <div class="down-content">
-          <div class="title-favorite-wrapper">
-            <a><h4>{{ car.brand }} {{ car.model }}</h4></a>
-            <button class="delete-button" (click)="deleteCar(car.id); $event.stopPropagation()">
-              <i class="fa fa-trash"></i>
-            </button>
-          </div>
-          <p>{{ car.status }}</p>
-          <span>{{ car.priceAmount | currency: car.priceCurrency }}</span>
-          <p>{{ car.plate }}</p>
-          <ul class="car-info">
-            <li>
-              <div class="item">
-                <i class="fas fa-calendar"></i>
-                <p>{{ car.year }}</p>
-              </div>
-            </li>
-            <li>
-              <div class="item">
-                <i class="fas fa-road"></i>
-                <p>{{ car.mileageKm | number }} km</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-
+      </article>
     </div>
-  </div>
+  </ng-container>
 </div>

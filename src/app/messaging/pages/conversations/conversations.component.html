@@ -1,13 +1,62 @@
-<!-- conversations.component.html -->
-<div *ngIf="!loading; else convLoading">
-  <div *ngFor="let c of conversations"
-       class="conversation-item"
-       (click)="openConversation(c)">
-    <div>Conversación #{{ c.id }}</div>
-    <small>Último mensaje: {{ c.lastMessagePreview }}</small>
+<div class="conversations-page">
+  <div class="conversations-panel">
+    <!-- Header -->
+    <div class="conversations-header">
+      <div class="icon-circle">
+        <span class="material-symbols-outlined">forum</span>
+      </div>
+      <div>
+        <h1 class="conversations-title">Mensajes</h1>
+        <p class="conversations-subtitle">
+          Revisa tus conversaciones con compradores y vendedores.
+        </p>
+      </div>
+    </div>
+
+    <!-- Contenido -->
+    <ng-container *ngIf="!loading; else convLoading">
+      <div *ngIf="conversations.length === 0" class="empty-state">
+        <div class="empty-card">
+          <span class="material-symbols-outlined empty-icon">mail_lock</span>
+          <h2>No tienes conversaciones todavía</h2>
+          <p>Cuando empieces a chatear sobre un vehículo, aparecerá aquí.</p>
+        </div>
+      </div>
+
+      <div class="conversation-list" *ngIf="conversations.length > 0">
+        <div
+          *ngFor="let c of conversations"
+          class="conversation-item"
+          (click)="openConversation(c)"
+        >
+          <div class="conversation-main">
+            <div class="conversation-avatar">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <div class="conversation-text">
+              <div class="conversation-title">
+                Conversación #{{ c.id }}
+              </div>
+              <div class="conversation-preview">
+                {{ c.lastMessagePreview || 'Sin mensajes aún' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="conversation-meta">
+            <!-- Si tu modelo tiene lastMessageAt puedes mostrarlo aquí -->
+            <!-- <span>{{ c.lastMessageAt | date:'short' }}</span> -->
+            <span class="conversation-pill">Ver chat</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #convLoading>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando conversaciones...</p>
+      </div>
+    </ng-template>
   </div>
 </div>
-
-<ng-template #convLoading>
-  <p>Cargando conversaciones...</p>
-</ng-template>

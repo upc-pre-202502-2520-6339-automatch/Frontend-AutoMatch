@@ -1,56 +1,105 @@
-<h2>My Purchases</h2>
-
-<ng-container *ngIf="salesState$ | async as state; else loadingTpl">
-  <div *ngIf="state.items.length === 0">
-    <p>You don't have purchases yet.</p>
-  </div>
-
-  <div class="sale-list" *ngIf="state.items.length > 0">
-    <mat-card *ngFor="let sale of state.items" class="sale-card">
-      <mat-card-title>
-        Sale #{{ sale.id }} – {{ sale.status }}
-      </mat-card-title>
-
-      <mat-card-content>
-        <p>Vehicle ID: {{ sale.vehicleId }}</p>
-        <p>Amount: {{ sale.priceAmount }} {{ sale.priceCurrency }}</p>
-        <p *ngIf="sale.reservationExpiresAt">
-          Reservation expires at:
-          {{ sale.reservationExpiresAt | date: 'short' }}
+<div class="purchases-page">
+  <div class="purchases-panel">
+    <div class="purchases-header">
+      <div class="icon-circle">
+        <span class="material-symbols-outlined">shopping_bag</span>
+      </div>
+      <div>
+        <h1 class="purchases-title">My Purchases</h1>
+        <p class="purchases-subtitle">
+          Track your reservations and complete your payments on time.
         </p>
+      </div>
+    </div>
 
-        <div class="images" *ngIf="sale.images?.length">
-          <img
-            *ngFor="let img of sale.images"
-            [src]="img"
-            alt="vehicle image"
-          />
+    <ng-container *ngIf="salesState$ | async as state; else loadingTpl">
+
+      <!-- Empty state -->
+      <div *ngIf="state.items.length === 0" class="empty-state">
+        <div class="empty-card">
+          <span class="material-symbols-outlined empty-icon">garage</span>
+          <h2>No purchases yet</h2>
+          <p>When you reserve a vehicle, it will appear here.</p>
         </div>
-      </mat-card-content>
+      </div>
 
-      <mat-card-actions>
-        <button
-          mat-stroked-button
-          color="primary"
-          *ngIf="sale.status === 'RESERVED' || sale.status === 'PAYMENT_PENDING'"
-          (click)="onPay(sale.id)"
-        >
-          Pay
-        </button>
+      <!-- Listado de compras -->
+      <div class="sale-list" *ngIf="state.items.length > 0">
+        <mat-card *ngFor="let sale of state.items" class="sale-card">
 
-        <button
-          mat-stroked-button
-          color="warn"
-          *ngIf="sale.status === 'RESERVED' || sale.status === 'PAYMENT_PENDING'"
-          (click)="onCancel(sale.id)"
-        >
-          Cancel
-        </button>
-      </mat-card-actions>
-    </mat-card>
+          <mat-card-title>
+            <div class="sale-card-header">
+              <div>
+                <div class="sale-id">Sale #{{ sale.id }}</div>
+              </div>
+              <span class="status-pill" [ngClass]="'status-' + (sale.status | lowercase)">
+                {{ sale.status | titlecase }}
+              </span>
+            </div>
+          </mat-card-title>
+
+          <mat-card-content>
+            <div class="sale-main">
+              <div class="sale-info">
+                <p class="info-line">
+                  <span class="label">Vehicle ID:</span>
+                  <span class="value">#{{ sale.vehicleId }}</span>
+                </p>
+                <p class="info-line">
+                  <span class="label">Amount:</span>
+                  <span class="value">
+                    {{ sale.priceAmount | number:'1.2-2' }} {{ sale.priceCurrency }}
+                  </span>
+                </p>
+                <p class="info-line" *ngIf="sale.reservationExpiresAt">
+                  <span class="label">Reservation expires:</span>
+                  <span class="value">
+                    {{ sale.reservationExpiresAt | date: 'short' }}
+                  </span>
+                </p>
+              </div>
+
+              <div class="sale-images" *ngIf="sale.images?.length">
+                <img
+                  *ngFor="let img of sale.images"
+                  [src]="img"
+                  alt="vehicle image"
+                />
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="sale-actions">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="btn-action"
+              *ngIf="sale.status === 'RESERVED' || sale.status === 'PAYMENT_PENDING'"
+              (click)="onPay(sale.id)"
+            >
+              Pay
+            </button>
+
+            <button
+              mat-stroked-button
+              color="warn"
+              class="btn-action"
+              *ngIf="sale.status === 'RESERVED' || sale.status === 'PAYMENT_PENDING'"
+              (click)="onCancel(sale.id)"
+            >
+              Cancel
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+    </ng-container>
+
+    <ng-template #loadingTpl>
+      <div class="loading-state">
+        <mat-progress-spinner mode="indeterminate" diameter="36"></mat-progress-spinner>
+        <p>Loading your purchases...</p>
+      </div>
+    </ng-template>
   </div>
-</ng-container>
-
-<ng-template #loadingTpl>
-  <p>Loading your purchases...</p>
-</ng-template>
+</div>

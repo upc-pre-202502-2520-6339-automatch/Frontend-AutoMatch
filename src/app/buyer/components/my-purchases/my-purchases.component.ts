@@ -4,7 +4,8 @@ import { SalesFacade, SalePageState } from '../../application/sales.facade';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatCard, MatCardActions, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {MatButton} from "@angular/material/button";
-import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, DecimalPipe, LowerCasePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-my-purchases',
@@ -22,7 +23,12 @@ import {AsyncPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
     NgIf,
     NgForOf,
     AsyncPipe,
-    DatePipe
+    DatePipe,
+    TitleCasePipe,
+    DecimalPipe,
+    MatProgressSpinner,
+    NgClass,
+    LowerCasePipe
   ]
 })
 export class MyPurchasesComponent implements OnInit {

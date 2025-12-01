@@ -1,7 +1,17 @@
+// my-sales.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {NgIf, NgForOf, AsyncPipe, DatePipe} from '@angular/common';
+import {
+  NgIf,
+  NgForOf,
+  AsyncPipe,
+  DatePipe,
+  DecimalPipe,
+  TitleCasePipe,
+  NgClass,
+  LowerCasePipe
+} from '@angular/common';
 import {
   MatCard,
   MatCardTitle,
@@ -9,6 +19,8 @@ import {
   MatCardActions
 } from '@angular/material/card';
 import { MatButton } from '@angular/material/button';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Router } from '@angular/router';
 
 import { SalesFacade, SalePageState } from '../../application/sales.facade';
 
@@ -25,7 +37,13 @@ import { SalesFacade, SalePageState } from '../../application/sales.facade';
     MatCardContent,
     MatCardActions,
     AsyncPipe,
-    DatePipe
+    DatePipe,
+    DecimalPipe,
+    TitleCasePipe,
+    NgClass,
+    MatButton,
+    MatProgressSpinner,
+    LowerCasePipe
   ]
 })
 export class MySalesComponent implements OnInit {
@@ -35,7 +53,8 @@ export class MySalesComponent implements OnInit {
 
   constructor(
     private salesFacade: SalesFacade,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router              // 👈 inyectamos Router
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +68,18 @@ export class MySalesComponent implements OnInit {
     setTimeout(() => this.loading = false, 500);
   }
 
-  // Aquí podrías agregar acciones específicas del seller,
-  // por ahora solo mostramos la lista.
+  /** Abrir chat con el comprador de esta venta */
+  openChatWithBuyer(sale: any): void {
+    if (!sale?.buyerId) {
+      console.error('[MySales] sale.buyerId no está definido');
+      return;
+    }
+
+    // Si en el futuro tu backend devuelve conversationId, úsalo aquí:
+    const conversationId = sale.conversationId ?? sale.id;
+
+    this.router.navigate(['/messages', conversationId], {
+      queryParams: { receiverId: sale.buyerId }
+    });
+  }
 }

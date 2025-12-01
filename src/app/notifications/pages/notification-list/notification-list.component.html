@@ -1,37 +1,87 @@
-<div class="notifications-header">
-  <h2>Notifications</h2>
+<div class="notifications-page">
+  <div class="notifications-panel">
+    <!-- Header -->
+    <div class="notifications-header">
+      <div class="header-left">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">notifications</span>
+        </div>
+        <div>
+          <h1 class="notifications-title">Notifications</h1>
+          <p class="notifications-subtitle">
+            Monitor the events AutoMatch is sending to your users in real time.
+          </p>
+        </div>
+      </div>
 
-  <a routerLink="/notifications/test" class="test-link">
-    Send test notification
-  </a>
-</div>
+      <a routerLink="/notifications/test" class="test-link">
+        <span class="material-symbols-outlined">bolt</span>
+        <span>Send test notification</span>
+      </a>
+    </div>
 
-<div *ngIf="loading">Loading notifications...</div>
-<div *ngIf="!loading && error">{{ error }}</div>
+    <!-- Loading -->
+    <div *ngIf="loading" class="state-card">
+      <div class="spinner"></div>
+      <p>Loading notifications...</p>
+    </div>
 
-<table *ngIf="!loading && !error && notifications.length > 0" class="notifications-table">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Type</th>
-    <th>Recipient</th>
-    <th>Status</th>
-    <th>Source Event</th>
-    <th>Created At</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let n of notifications" (click)="openDetail(n)" class="clickable-row">
-    <td>{{ n.id }}</td>
-    <td>{{ n.type }}</td>
-    <td>{{ n.recipient }}</td>
-    <td>{{ n.status }}</td>
-    <td>{{ n.sourceEvent }}</td>
-    <td>{{ n.createdAt | date : 'short' }}</td>
-  </tr>
-  </tbody>
-</table>
+    <!-- Error -->
+    <div *ngIf="!loading && error" class="state-card state-error">
+      <span class="material-symbols-outlined state-icon">error</span>
+      <p>{{ error }}</p>
+    </div>
 
-<div *ngIf="!loading && !error && notifications.length === 0">
-  No notifications found.
+    <!-- Empty -->
+    <div *ngIf="!loading && !error && notifications.length === 0" class="empty-state">
+      <div class="empty-card">
+        <span class="material-symbols-outlined empty-icon">notifications_off</span>
+        <h2>No notifications found</h2>
+        <p>
+          When your services start emitting events, you'll see them listed here.
+        </p>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div *ngIf="!loading && !error && notifications.length > 0" class="notifications-table-wrapper">
+      <table class="notifications-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Recipient</th>
+          <th>Status</th>
+          <th>Source Event</th>
+          <th>Created At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          *ngFor="let n of notifications"
+          (click)="openDetail(n)"
+          class="clickable-row"
+        >
+          <td>#{{ n.id }}</td>
+          <td>{{ n.type }}</td>
+          <td>{{ n.recipient }}</td>
+          <td>
+            <span
+              class="status-pill"
+              [ngClass]="{
+                'status-sent': n.status === 'SENT',
+                'status-pending': n.status === 'PENDING',
+                'status-failed': n.status === 'FAILED'
+              }"
+            >
+              {{ n.status }}
+            </span>
+          </td>
+          <td>{{ n.sourceEvent }}</td>
+          <td>{{ n.createdAt | date : 'short' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

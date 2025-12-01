@@ -1,63 +1,103 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div class="profile-form-page">
+  <div class="profile-form-card">
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>First Name</mat-label>
-    <input matInput formControlName="firstName">
-  </mat-form-field>
+    <div class="profile-form-header">
+      <h1 class="profile-form-title">Complete your profile</h1>
+      <p class="profile-form-subtitle">
+        Tell us who you are so we can personalize your AutoMatch experience.
+      </p>
+    </div>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Last Name</mat-label>
-    <input matInput formControlName="lastName">
-  </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="profile-form-grid">
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Email</mat-label>
-    <input matInput formControlName="email">
-  </mat-form-field>
+      <!-- Datos básicos -->
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName">
+      </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Phone Number</mat-label>
-    <input matInput formControlName="phoneNumber">
-  </mat-form-field>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
 
-  <!-- Rol de perfil (no confundir con roles del JWT) -->
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Profile Role</mat-label>
-    <mat-select formControlName="roleType">
-      <mat-option *ngFor="let r of roleTypes" [value]="r">{{ r }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email">
+      </mat-form-field>
 
-  <!-- Campos de vendedor solo si roleType === 'SELLER' -->
-  <ng-container *ngIf="form.get('roleType')?.value === 'SELLER'">
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber">
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>RUC</mat-label>
-      <input matInput formControlName="ruc">
-    </mat-form-field>
+      <!-- Rol de perfil -->
+      <mat-form-field appearance="outline" class="field full-width-field">
+        <mat-label>Profile type</mat-label>
+        <mat-select formControlName="roleType">
+          <mat-option *ngFor="let r of roleTypes" [value]="r">
+            {{ r === 'SELLER' ? 'Seller' : 'Buyer' }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Business Type</mat-label>
-      <mat-select formControlName="businessType">
-        <mat-option *ngFor="let b of businessTypes" [value]="b">{{ b }}</mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Sección de vendedor -->
+      <ng-container *ngIf="form.get('roleType')?.value === 'SELLER'">
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Business Name</mat-label>
-      <input matInput formControlName="businessName">
-    </mat-form-field>
+        <div class="seller-section full-width-field">
+          <h2 class="section-title">Business information</h2>
+          <p class="section-subtitle">
+            Complete these fields if you will publish vehicles as a seller.
+          </p>
+        </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Address</mat-label>
-      <input matInput formControlName="address">
-    </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>RUC</mat-label>
+          <input matInput formControlName="ruc">
+        </mat-form-field>
 
-  </ng-container>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Business Type</mat-label>
+          <mat-select formControlName="businessType">
+            <mat-option *ngFor="let b of businessTypes" [value]="b">{{ b }}</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit" [disabled]="loading">
-    {{ loading ? 'Saving...' : 'Save Profile' }}
-  </button>
+        <mat-form-field appearance="outline" class="field full-width-field">
+          <mat-label>Business Name</mat-label>
+          <input matInput formControlName="businessName">
+        </mat-form-field>
 
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-</form>
+        <mat-form-field appearance="outline" class="field full-width-field">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address">
+        </mat-form-field>
+
+      </ng-container>
+
+      <!-- Acciones -->
+      <div class="form-actions full-width-field">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="btn-primary"
+          [disabled]="loading"
+        >
+          {{ loading ? 'Saving...' : 'Save profile' }}
+        </button>
+      </div>
+
+      <p *ngIf="errorMessage" class="error-message full-width-field">
+        {{ errorMessage }}
+      </p>
+
+    </form>
+
+    <!-- Overlay de carga opcional -->
+    <div class="overlay-loading" *ngIf="loading">
+      <mat-progress-spinner mode="indeterminate" diameter="38"></mat-progress-spinner>
+    </div>
+
+  </div>
+</div>

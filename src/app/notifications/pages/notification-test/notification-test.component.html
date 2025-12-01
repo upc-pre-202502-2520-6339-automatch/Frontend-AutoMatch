@@ -1,66 +1,137 @@
-<h2>Send test notification</h2>
+<div class="notification-test-page">
+  <div class="notification-test-panel">
+    <!-- Header -->
+    <div class="test-header">
+      <div class="header-left">
+        <div class="icon-circle">
+          <span class="material-symbols-outlined">bolt</span>
+        </div>
+        <div>
+          <h1 class="test-title">Send test notification</h1>
+          <p class="test-subtitle">
+            Trigger a fake event to verify SMS, WhatsApp or Email delivery from AutoMatch.
+          </p>
+        </div>
+      </div>
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="notification-form">
-  <div class="form-row">
-    <label for="type">Type</label>
-    <select id="type" formControlName="type">
-      <option value="SMS">SMS</option>
-      <option value="WHATSAPP">WhatsApp</option>
-      <option value="EMAIL">Email</option>
-    </select>
+    <!-- Formulario -->
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="notification-form"
+    >
+      <div class="form-row two-cols">
+        <div class="form-field">
+          <label for="type">Type</label>
+          <select id="type" formControlName="type">
+            <option value="SMS">SMS</option>
+            <option value="WHATSAPP">WhatsApp</option>
+            <option value="EMAIL">Email</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="recipient">Recipient</label>
+          <input
+            id="recipient"
+            type="text"
+            formControlName="recipient"
+            placeholder="+51999999999"
+          />
+          <small
+            *ngIf="form.get('recipient')?.invalid && form.get('recipient')?.touched"
+            class="field-error"
+          >
+            Recipient is required.
+          </small>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field full-width">
+          <label for="sourceEvent">Source event (optional)</label>
+          <input
+            id="sourceEvent"
+            type="text"
+            formControlName="sourceEvent"
+            placeholder="SALE_PAID, PAYMENT_CONFIRMED, etc."
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field full-width">
+          <label for="message">Message</label>
+          <textarea
+            id="message"
+            rows="4"
+            formControlName="message"
+            placeholder="Write the message to send..."
+          ></textarea>
+          <small
+            *ngIf="form.get('message')?.invalid && form.get('message')?.touched"
+            class="field-error"
+          >
+            Message is required (max 500 characters).
+          </small>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="sending || form.invalid">
+          <span *ngIf="!sending" class="btn-label">
+            <span class="material-symbols-outlined">send</span>
+            <span>Send notification</span>
+          </span>
+          <span *ngIf="sending" class="btn-label">
+            <span class="loader-dot"></span>
+            <span>Sending...</span>
+          </span>
+        </button>
+      </div>
+    </form>
+
+    <!-- Error -->
+    <div *ngIf="error" class="error-box">
+      <span class="material-symbols-outlined">error</span>
+      <span>{{ error }}</span>
+    </div>
+
+    <!-- Resultado -->
+    <div *ngIf="lastNotification" class="result-box">
+      <div class="result-header">
+        <h3>Last notification sent</h3>
+        <span
+          class="status-pill"
+          [ngClass]="{
+            'status-sent': lastNotification.status === 'SENT',
+            'status-pending': lastNotification.status === 'PENDING',
+            'status-failed': lastNotification.status === 'FAILED'
+          }"
+        >
+          {{ lastNotification.status }}
+        </span>
+      </div>
+
+      <div class="result-grid">
+        <div class="result-row">
+          <span class="label">ID</span>
+          <span class="value">#{{ lastNotification.id }}</span>
+        </div>
+        <div class="result-row">
+          <span class="label">Created At</span>
+          <span class="value">
+            {{ lastNotification.createdAt | date : 'short' }}
+          </span>
+        </div>
+        <div class="result-row" *ngIf="lastNotification.sentAt">
+          <span class="label">Sent At</span>
+          <span class="value">
+            {{ lastNotification.sentAt | date : 'short' }}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="form-row">
-    <label for="recipient">Recipient</label>
-    <input
-      id="recipient"
-      type="text"
-      formControlName="recipient"
-      placeholder="+51999999999"
-    />
-    <small *ngIf="form.get('recipient')?.invalid && form.get('recipient')?.touched">
-      Recipient is required.
-    </small>
-  </div>
-
-  <div class="form-row">
-    <label for="sourceEvent">Source event (optional)</label>
-    <input
-      id="sourceEvent"
-      type="text"
-      formControlName="sourceEvent"
-      placeholder="SALE_PAID, PAYMENT_CONFIRMED, etc."
-    />
-  </div>
-
-  <div class="form-row">
-    <label for="message">Message</label>
-    <textarea
-      id="message"
-      rows="4"
-      formControlName="message"
-      placeholder="Write the message to send..."
-    ></textarea>
-    <small *ngIf="form.get('message')?.invalid && form.get('message')?.touched">
-      Message is required (max 500 characters).
-    </small>
-  </div>
-
-  <button type="submit" [disabled]="sending || form.invalid">
-    {{ sending ? 'Sending...' : 'Send notification' }}
-  </button>
-</form>
-
-<div *ngIf="error" class="error-box">
-  {{ error }}
-</div>
-
-<div *ngIf="lastNotification" class="result-box">
-  <h3>Last notification sent</h3>
-  <p><strong>ID:</strong> {{ lastNotification.id }}</p>
-  <p><strong>Status:</strong> {{ lastNotification.status }}</p>
-  <p><strong>Created At:</strong> {{ lastNotification.createdAt | date : 'short' }}</p>
-  <p *ngIf="lastNotification.sentAt">
-    <strong>Sent At:</strong> {{ lastNotification.sentAt | date : 'short' }}
-  </p>
 </div>
