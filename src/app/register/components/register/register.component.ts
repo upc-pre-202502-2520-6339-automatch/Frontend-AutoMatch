@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
       next: () => {
         this.loading = false;
         // 👉 Nuevo usuario va directo a completar su perfil
-        this.router.navigate(['/profile-form']);
+        this.router.navigate(['/plan']);
       },
       error: err => {
         this.loading = false;

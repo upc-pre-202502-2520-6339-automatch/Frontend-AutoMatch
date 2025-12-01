@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { PlanService } from '../../service/plan.service';
-import { SubscriptionService } from '../../service/subscription.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { PlanService } from '../../service/plan.service';
+import { PaymentsApiService } from '../../../payment/services/payments-api.service';
 
 @Component({
   selector: 'app-payment-form',
@@ -10,62 +12,120 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./payment-form.component.css'],
 })
 export class PaymentFormComponent implements OnInit {
+
   selectedPlan: any;
-  isSummaryVisible: boolean = false;
+  isSummaryVisible = false;
+
+  paymentForm!: FormGroup;
+  loading = false;
 
   constructor(
     private planService: PlanService,
-    private subscriptionService: SubscriptionService,
+    private paymentsApi: PaymentsApiService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.selectedPlan = this.planService.getPlan();
+
+    // Si alguien entra directo sin elegir plan, lo regreso
+    if (!this.selectedPlan) {
+      this.snackBar.open('Choose a plan first.', 'Close', { duration: 3000 });
+      this.router.navigate(['/plan']);
+      return;
+    }
+
+    this.buildForm();
+  }
+
+  private buildForm(): void {
+    this.paymentForm = this.fb.group({
+      cardNumber: ['', [Validators.required]],
+      cardholderFirstName: ['', [Validators.required]],
+      cardholderLastName: ['', [Validators.required]],
+      expiryDate: ['', [Validators.required]],      // MM/YY
+      cvv: ['', [Validators.required]],
+      installments: [1, [Validators.required]],
+
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      confirmEmail: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required]],
+      documentNumber: ['', [Validators.required]],
+      province: ['', [Validators.required]]
+    });
   }
 
   onSubmit(): void {
-    this.subscriptionService.getMySubscription().subscribe(
-      (subscription) => {
-        if (subscription && subscription.status === 'PAID') {
-          this.snackBar.open('You already have an active subscription.', 'Close', { duration: 3000 });
-          this.router.navigate(['/profile']);
-        } else {
-          this.createNewSubscription();
-        }
-      },
-      (error) => {
-        if (error.status === 404) {
-          this.createNewSubscription();
-        } else {
-          this.snackBar.open('Choose a plan first', 'Close', { duration: 3000 });
-        }
-      }
-    );
-  }
+    if (!this.selectedPlan) {
+      this.snackBar.open('Choose a plan first.', 'Close', { duration: 3000 });
+      this.router.navigate(['/plan']);
+      return;
+    }
 
-  private createNewSubscription(): void {
-    const subscriptionData = {
-      price: this.selectedPlan.price,
-      description: this.selectedPlan.name,
+    if (this.paymentForm.invalid) {
+      this.paymentForm.markAllAsTouched();
+      this.snackBar.open('Please complete all required fields.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const { email, confirmEmail, expiryDate } = this.paymentForm.value;
+
+    if (email !== confirmEmail) {
+      this.snackBar.open('Emails do not match.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    // Parsear MM/YY
+    const [mmRaw, yyRaw] = (expiryDate as string).split('/');
+    const mm = mmRaw?.trim();
+    const yy = yyRaw?.trim();
+
+    if (!mm || !yy) {
+      this.snackBar.open('Invalid expiry date. Use MM/YY.', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const fullYear = yy.length === 2 ? `20${yy}` : yy;
+
+    const form = this.paymentForm.value;
+
+    const payload = {
+      cardNumber: form.cardNumber,
+      expiryMonth: mm,
+      expiryYear: fullYear,
+      cvv: form.cvv,
+      cardholderFirstName: form.cardholderFirstName,
+      cardholderLastName: form.cardholderLastName,
+      billingFirstName: form.firstName,
+      billingLastName: form.lastName,
+      email: form.email,
+      phone: form.phone,
+      documentNumber: form.documentNumber,
+      province: form.province,
+      installments: Number(form.installments)
     };
 
-    this.subscriptionService.createSubscription(subscriptionData).subscribe(
-      () => {
-        this.snackBar.open('Subscription created successfully.', 'Close', { duration: 3000 });
-        this.router.navigate(['/profile']);
+    this.loading = true;
+
+    this.paymentsApi.tokenizeCard(payload).subscribe({
+      next: () => {
+        this.loading = false;
+        this.snackBar.open('Card saved successfully.', 'Close', { duration: 3000 });
+        // 👉 Directo al formulario de perfil
+        this.router.navigate(['/profile-form']);
       },
-      (error) => {
-        this.snackBar.open('Error processing subscription.', 'Close', { duration: 3000 });
+      error: () => {
+        this.loading = false;
+        this.snackBar.open('Error processing payment.', 'Close', { duration: 3000 });
       }
-    );
+    });
   }
 
   toggleSummary(): void {
     this.isSummaryVisible = !this.isSummaryVisible;
-    const summary = document.querySelector('.summary-column');
-    if (summary) {
-      summary.classList.toggle('active');
-    }
   }
 }

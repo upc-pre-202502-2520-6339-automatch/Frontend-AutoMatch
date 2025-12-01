@@ -14,8 +14,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentsApiService {
-  private baseUrl = `${environment.apiUrl}payments`;
-  private methodsUrl = `${environment.apiUrl}payment-methods`;
+  private baseUrl = `${environment.apiUrl}/payments`;
+  private methodsUrl = `${environment.apiUrl}/payment-methods`;
 
   constructor(private http: HttpClient) {}
 

@@ -22,9 +22,12 @@
           <app-language-switcher class="language-switcher-item"></app-language-switcher>
         </li>
 
+        <li><a routerLink="/messages" (click)="closeMenu()">{{ 'Messages' | translate }}</a></li>
         <li><a routerLink="/car-listing-form" (click)="closeMenu()">{{ 'SELL_CARS' | translate }}</a></li>
         <li><a routerLink="/my-cars" (click)="closeMenu()">{{ 'MY_CARS' | translate }}</a></li>
-        <li><a routerLink="/offers" (click)="closeMenu()">{{ 'OFFERS' | translate }}</a></li>
+        <li><a routerLink="/notifications" (click)="closeMenu()">{{ 'Notification' | translate }}</a></li>
+        <li><a routerLink="/my-sales" (click)="closeMenu()">{{ 'My Sales' | translate }}</a></li>
+
 
         <li *ngIf="isMenuOpen">
           <a routerLink="/profile" (click)="closeMenu()">
@@ -68,6 +71,8 @@
             <span class="arrow material-icons">chevron_right</span>
           </a>
         </div>
+
+
       </div>
 
       <div class="hamburger" (click)="toggleMenu()">
@@ -95,9 +100,11 @@
         </li>
 
         <li><a routerLink="/home" (click)="closeMenu()">{{ 'HOME' | translate }}</a></li>
-        <li><a routerLink="/favorites" (click)="closeMenu()">{{ 'MY_FAVORITES' | translate }}</a></li>
         <li><a routerLink="/car-listing" (click)="closeMenu()">{{ 'CAR_LISTING' | translate }}</a></li>
-        <li><a routerLink="/offers" (click)="closeMenu()">{{ 'OFFERS' | translate }}</a></li>
+        <li><a routerLink="/my-purchases" (click)="closeMenu()">{{ 'Mis Compras' | translate }}</a></li>
+        <li><a routerLink="/notifications" (click)="closeMenu()">{{ 'Notification' | translate }}</a></li>
+        <li><a routerLink="/messages" (click)="closeMenu()">{{ 'Messages' | translate }}</a></li>
+
 
         <li *ngIf="isMenuOpen">
           <a routerLink="/profile" (click)="closeMenu()">

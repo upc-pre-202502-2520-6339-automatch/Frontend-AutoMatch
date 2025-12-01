@@ -1,37 +1,71 @@
-
 <div class="grid-container">
   <div class="scrollable-content">
-    <h2><app-language-switcher></app-language-switcher>{{ 'CARD_DETAILS' | translate }} </h2>
-    <form>
+    <h2>
+      <app-language-switcher></app-language-switcher>
+      {{ 'CARD_DETAILS' | translate }}
+    </h2>
+
+    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+      <!-- CARD DATA -->
       <div class="form-group">
         <label for="card-number">{{ 'CARD_NUMBER' | translate }}</label>
-        <input type="text" id="card-number" placeholder="{{ 'CARD_NUMBER_PLACEHOLDER' | translate }}" required>
+        <input
+          type="text"
+          id="card-number"
+          formControlName="cardNumber"
+          [placeholder]="'CARD_NUMBER_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="card-name">{{ 'CARDHOLDER_FIRST_NAME' | translate }}</label>
-        <input type="text" id="card-name" placeholder="{{ 'FIRST_NAME_PLACEHOLDER' | translate }}" required>
+        <input
+          type="text"
+          id="card-name"
+          formControlName="cardholderFirstName"
+          [placeholder]="'FIRST_NAME_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="card-lastname">{{ 'CARDHOLDER_LAST_NAME' | translate }}</label>
-        <input type="text" id="card-lastname" placeholder="{{ 'LAST_NAME_PLACEHOLDER' | translate }}" required>
+        <input
+          type="text"
+          id="card-lastname"
+          formControlName="cardholderLastName"
+          [placeholder]="'LAST_NAME_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-row">
         <div class="form-group half-width">
           <label for="expiry-date">{{ 'EXPIRY_DATE' | translate }}</label>
-          <input type="text" id="expiry-date" placeholder="MM/YY" required>
+          <input
+            type="text"
+            id="expiry-date"
+            formControlName="expiryDate"
+            placeholder="MM/YY"
+            required
+          />
         </div>
         <div class="form-group half-width">
           <label for="cvv">{{ 'SECURITY_CODE' | translate }}</label>
-          <input type="text" id="cvv" placeholder="{{ 'CVV_PLACEHOLDER' | translate }}" required>
+          <input
+            type="text"
+            id="cvv"
+            formControlName="cvv"
+            [placeholder]="'CVV_PLACEHOLDER' | translate"
+            required
+          />
         </div>
       </div>
 
       <div class="form-group">
         <label for="installments">{{ 'INSTALLMENTS' | translate }}</label>
-        <select id="installments" required>
+        <select id="installments" formControlName="installments" required>
           <option value="">{{ 'SELECT' | translate }}</option>
           <option value="3">{{ 'INSTALLMENTS_3' | translate }}</option>
           <option value="6">{{ 'INSTALLMENTS_6' | translate }}</option>
@@ -39,65 +73,110 @@
         </select>
       </div>
 
-      <hr>
+      <hr />
 
+      <!-- BILLING & USER DETAILS -->
       <h2>{{ 'BILLING_USER_DETAILS' | translate }}</h2>
       <div class="form-row">
         <div class="form-group half-width">
           <label for="first-name">{{ 'FIRST_NAME' | translate }}</label>
-          <input type="text" id="first-name" placeholder="{{ 'FIRST_NAME_PLACEHOLDER' | translate }}" required>
+          <input
+            type="text"
+            id="first-name"
+            formControlName="firstName"
+            [placeholder]="'FIRST_NAME_PLACEHOLDER' | translate"
+            required
+          />
         </div>
         <div class="form-group half-width">
           <label for="last-name">{{ 'LAST_NAME' | translate }}</label>
-          <input type="text" id="last-name" placeholder="{{ 'LAST_NAME_PLACEHOLDER' | translate }}" required>
+          <input
+            type="text"
+            id="last-name"
+            formControlName="lastName"
+            [placeholder]="'LAST_NAME_PLACEHOLDER' | translate"
+            required
+          />
         </div>
       </div>
 
       <div class="form-group">
         <label for="email">{{ 'EMAIL' | translate }}</label>
-        <input type="email" id="email" placeholder="{{ 'EMAIL_PLACEHOLDER' | translate }}" required>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          [placeholder]="'EMAIL_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="confirm-email">{{ 'CONFIRM_EMAIL' | translate }}</label>
-        <input type="email" id="confirm-email" placeholder="{{ 'CONFIRM_EMAIL_PLACEHOLDER' | translate }}" required>
+        <input
+          type="email"
+          id="confirm-email"
+          formControlName="confirmEmail"
+          [placeholder]="'CONFIRM_EMAIL_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="phone">{{ 'PHONE' | translate }}</label>
-        <input type="tel" id="phone" placeholder="{{ 'PHONE_PLACEHOLDER' | translate }}" required>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="phone"
+          [placeholder]="'PHONE_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="document-number">{{ 'DOCUMENT_NUMBER' | translate }}</label>
-        <input type="text" id="document-number" placeholder="{{ 'DOCUMENT_NUMBER_PLACEHOLDER' | translate }}" required>
+        <input
+          type="text"
+          id="document-number"
+          formControlName="documentNumber"
+          [placeholder]="'DOCUMENT_NUMBER_PLACEHOLDER' | translate"
+          required
+        />
       </div>
 
       <div class="form-group">
         <label for="province">{{ 'PROVINCE' | translate }}</label>
-        <select id="province" required>
+        <select id="province" formControlName="province" required>
           <option value="">{{ 'SELECT' | translate }}</option>
           <option value="lima">{{ 'LIMA' | translate }}</option>
           <option value="arequipa">{{ 'AREQUIPA' | translate }}</option>
           <option value="cusco">{{ 'CUSCO' | translate }}</option>
         </select>
       </div>
-    </form>
 
-    <div class="summary-toggle-button" (click)="toggleSummary()">{{ 'VIEW_SUMMARY' | translate }}</div>
+      <!-- En mobile podrías poner el botón aquí también si quieres -->
+      <div class="summary-toggle-button" (click)="toggleSummary()">
+        {{ 'VIEW_SUMMARY' | translate }}
+      </div>
+    </form>
   </div>
 
-  <div class="summary-column" *ngIf="selectedPlan">
+  <!-- COLUMN SUMMARY -->
+  <div class="summary-column" *ngIf="selectedPlan" [class.active]="isSummaryVisible">
     <h2>{{ 'YOUR_PRODUCTS' | translate }}</h2>
     <div class="product-summary">
       <p><strong>{{ selectedPlan.name | translate }}</strong></p>
       <ul>
-        <li *ngFor="let feature of selectedPlan.features">{{ feature | translate }}</li>
+        <li *ngFor="let feature of selectedPlan.features">
+          {{ feature | translate }}
+        </li>
       </ul>
-      <hr>
+      <hr />
       <p><strong>{{ 'TOTAL_PAY' | translate }}: S/.{{ selectedPlan.price }}</strong></p>
 
-      <button type="submit" (click)="onSubmit()">{{ 'MAKE_PAYMENT' | translate }}</button>
+      <button type="button" (click)="onSubmit()" [disabled]="loading">
+        {{ loading ? ('PROCESSING_PAYMENT' | translate) : ('MAKE_PAYMENT' | translate) }}
+      </button>
     </div>
   </div>
 </div>
