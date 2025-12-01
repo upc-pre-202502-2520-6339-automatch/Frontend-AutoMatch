@@ -8,8 +8,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { BuyerRepository } from './buyer/domain/repositories/buyer.repository';
-import { BuyerHttpRepository } from './buyer/infrastructure/http/buyer-http.repository';
+
 
 // Angular Material Imports
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -41,27 +40,24 @@ import { ToolbarComponent } from './public/components/toolbar/toolbar.component'
 import { LoginComponent } from "./register/components/login/login.component";
 import { RegisterComponent } from './register/components/register/register.component';
 import { ForgotPasswordComponent } from './register/components/forgot-password/forgot-password.component';
-import { CarDetailsComponent } from './public/pages/car-details/car-details.component';
 import { CarListingFormComponent } from './cars/components/car-listing-form/car-listing-form.component';
-import { MechanicRevisionComponent } from './mechanic/components/mechanic-revision/mechanic-revision.component';
-import { MechanicCheckComponent } from './mechanic/components/mechanic-check/mechanic-check.component';
 import { PlanComponent } from "./plans/components/plan/plan.component";
 import { PaymentFormComponent } from "./plans/components/payment-form/payment-form.component";
 import { MyCarsComponent } from './cars/components/my-cars/my-cars.component';
 import { CarListingComponent } from './cars/components/car-listing/car-listing.component';
 import { FavoritesComponent } from './cars/components/favorites/favorites.component';
 import { ProfileComponent } from './profiles/components/profile/profile.component';
-import { PayComponent } from './buyer/components/pay/pay.component';
-import { SendDataComponent } from './buyer/components/send-data/send-data.component';
-import { TechnicalReviewComponent } from './buyer/components/technical-review/technical-review.component';
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
 import { ProfileFormComponent } from './profiles/components/profile-form/profile-form.component';
-import { AuthenticationInterceptor } from "./register/services/authentication.interceptor.service";
+import { AuthenticationInterceptorService } from "./register/services/authentication.interceptor.service";
 import { AuthenticationSectionComponent } from "./register/components/authentication-section/authentication-section.component";
 import { LanguageSwitcherComponent } from './public/components/language-switcher/language-switcher.component';
-import { VehiclePaymentStepperComponent } from './transaction/components/vehicle-payment-stepper/vehicle-payment-stepper.component';
+import { VehiclePaymentStepperComponent } from './payment/components/vehicle-payment-stepper/vehicle-payment-stepper.component';
 import {MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious} from "@angular/material/stepper";
-import { SellerOffersComponent } from './transaction/components/seller-offers/seller-offers.component';
+import { MyPurchasesComponent } from './buyer/components/my-purchases/my-purchases.component';
+import { MySalesComponent } from './buyer/components/my-sales/my-sales.component';
+import { MessagingModule } from './messaging/messaging.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
@@ -76,24 +72,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToolbarComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    CarDetailsComponent,
     CarListingFormComponent,
-    MechanicRevisionComponent,
-    MechanicCheckComponent,
     PlanComponent,
     PaymentFormComponent,
     MyCarsComponent,
     CarListingComponent,
-    ProfileComponent,
-    PayComponent,
     LoginComponent,
-    SendDataComponent,
-    TechnicalReviewComponent,
     ProfileFormComponent,
     AuthenticationSectionComponent,
     LanguageSwitcherComponent,
     VehiclePaymentStepperComponent,
-    SellerOffersComponent
   ],
   imports: [
     BrowserModule,
@@ -137,13 +125,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatStepLabel,
     MatStepper,
     MatStepperNext,
-    MatStepperPrevious
+    MatStepperPrevious,
+    MessagingModule,
+    NotificationsModule
   ],
   providers: [
-    { provide: BuyerRepository, useClass: BuyerHttpRepository },
-    { 
+    {
       provide: HTTP_INTERCEPTORS,
-      useClass: AuthenticationInterceptor,
+      useClass: AuthenticationInterceptorService,
       multi: true
     }
   ],

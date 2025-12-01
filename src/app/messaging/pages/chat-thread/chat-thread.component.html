@@ -1,0 +1,16 @@
+<!-- messaging/pages/chat-thread/chat-thread.component.html -->
+<div class="chat-thread">
+
+  <div class="messages-container">
+    <ng-container *ngIf="!loading; else loadingTpl">
+      <app-message-list [messages]="messages"></app-message-list>
+    </ng-container>
+    <ng-template #loadingTpl>
+      <p>Cargando mensajes...</p>
+    </ng-template>
+  </div>
+
+  <div class="input-container">
+    <app-message-input (send)="onSend($event)"></app-message-input>
+  </div>
+</div>

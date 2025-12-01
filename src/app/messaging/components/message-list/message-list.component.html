@@ -1,0 +1,11 @@
+<!-- message-list.component.html -->
+<div class="message-list">
+  <div *ngFor="let m of messages" class="message-item">
+    <div class="message-content">
+      {{ m.content }}
+    </div>
+    <div class="message-meta">
+      {{ m.createdAt | date : 'short' }} · {{ m.status }}
+    </div>
+  </div>
+</div>

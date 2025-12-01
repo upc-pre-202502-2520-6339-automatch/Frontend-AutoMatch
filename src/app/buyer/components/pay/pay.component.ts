@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+/*import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Buyer, Seller } from '../../domain/models';
@@ -54,3 +54,4 @@ export class PayComponent implements OnInit {
     }
   }
 }
+*/

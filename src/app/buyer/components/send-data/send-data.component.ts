@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+/*import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BuyerFacade } from '../../application/buyer.facade';
@@ -48,4 +48,4 @@ export class SendDataComponent implements OnInit {
       this.router.navigate(['/pay']);
     }
   }
-}
+}*/

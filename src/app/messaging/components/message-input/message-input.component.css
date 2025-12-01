@@ -1,0 +1,29 @@
+/* message-input.component.css */
+.message-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.message-input textarea {
+  flex: 1;
+  resize: none;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-family: inherit;
+}
+
+.message-input button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #2959ad;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.message-input button:hover {
+  background: #1f4689;
+}

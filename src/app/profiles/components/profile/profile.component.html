@@ -21,7 +21,9 @@
     <div class="profile-details">
       <div class="profile-info-edit-container">
         <div class="profile-header-info">
-          <h2 *ngIf="!editMode" class="profile-name">{{ userData.firstName }} {{ userData.lastName }}</h2>
+          <h2 *ngIf="!editMode" class="profile-name">
+            {{ userData.firstName }} {{ userData.lastName }}
+          </h2>
           <div *ngIf="editMode">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
@@ -35,9 +37,9 @@
           <p class="profile-role">
             <span class="role">
             <span class="material-symbols-outlined role-icon">
-            {{  currentRole === 'ROLE_SELLER' ? 'store' :
-              currentRole === 'ROLE_MECHANIC' ? 'build' :
-                currentRole === 'ROLE_BUYER' ? 'car_tag' : 'person' }}
+            {{  currentRole === 'SELLER' ? 'store' :
+              currentRole === 'MECHANIC' ? 'build' :
+                currentRole === 'BUYER' ? 'car_tag' : 'person' }}
             </span>
               {{ getRoleDisplayName(currentRole) }}
                 </span>
@@ -45,7 +47,7 @@
             <span class="material-symbols-outlined email-icon">email</span>
               {{ userData.email }}
             </span>
-            <ng-container *ngIf="currentRole === 'ROLE_SELLER' && subscriptionData">
+            <ng-container *ngIf="currentRole === 'SELLER' && subscriptionData">
               <span class="subscription">
                 <span class="material-symbols-outlined subscription-icon">credit_card</span>
                 {{ subscriptionData.description | translate  }}
@@ -78,7 +80,7 @@
 
     <hr class="profile-divider">
 
-    <ng-container *ngIf="currentRole === 'ROLE_BUYER'">
+    <ng-container *ngIf="currentRole === 'BUYER'">
       <div class="profile-payment-methods">
         <h3>{{ 'RECENT_FAVORITES' | translate }}</h3>
         <div class="payment-methods-container">
@@ -95,7 +97,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="currentRole === 'ROLE_SELLER'">
+    <ng-container *ngIf="currentRole === 'SELLER'">
       <div class="profile-payment-methods">
         <h3>{{ 'PAYMENT_METHODS' | translate }}</h3>
 
@@ -148,7 +150,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="currentRole === 'ROLE_MECHANIC'">
+    <ng-container *ngIf="currentRole === 'MECHANIC'">
       <div class="profile-payment-methods">
         <h3>{{ 'RECENT_REVIEWS' | translate }}</h3>
         <div class="payment-methods-container">

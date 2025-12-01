@@ -1,174 +1,119 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { MatSnackBar } from '@angular/material/snack-bar';  
-import { CarService } from "../../../cars/services/car/car.service";
-import { FavoriteService } from "../../../cars/services/favorite-service/favorite.service";
-import { AuthService } from "../../../register/service/auth.service";
-import { ReviewService } from "../../../mechanic/services/review.service";
-import { forkJoin, map } from 'rxjs';
+// home.component.ts
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Vehicle } from '../../../cars/domain/models/vehicle.model';
+import { AuthenticationService } from '../../../register/services/authentication.service';
+import { VehicleFacade } from '../../../cars/application/vehicle-facade';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
-  userRole: string = '';
-  cars: any[] = [];
-  pendingCars: any[] = [];
-  certifiedCars: any[] = [];
-  defaultImage: string = 'assets/default_image.jpg';
-  loading: boolean = true;
-  user: any;
-  reviews: any[] = [];
+export class HomeComponent implements OnInit, OnDestroy {
+
+  // estado sesión / roles
+  isSignedIn = false;
+  isSeller = false;
+  isBuyer = false;
+  isMechanic = false;
+
+  // loader común
+  loading = false;
+
+  // datos para las secciones
+  cars: Vehicle[] = [];          // catálogo para compradores
+  myVehicles: Vehicle[] = [];    // mis autos (seller)
+  pendingCars: Vehicle[] = [];   // autos en revisión (mecánico)
+  certifiedCars: Vehicle[] = []; // por ahora vacío, luego lo conectas a reviews reales
+  reviews: { vehicle: Vehicle; notes: string }[] = [];
+
+  defaultImage = 'assets/images/cars/default-car.png';
+
+  private subscriptions = new Subscription();
 
   constructor(
     private router: Router,
-    private carService: CarService,
-    private favoriteService: FavoriteService,
-    private authService: AuthService,
-    private reviewService: ReviewService,
-    private snackBar: MatSnackBar  
+    private vehicleFacade: VehicleFacade,
+    private auth: AuthenticationService
   ) {}
 
-  ngOnInit() {
-    this.userRole = localStorage.getItem('userRole') || '';
-    this.loadAllCars();
-
-    if (this.userRole === 'ROLE_MECHANIC') {
-      this.loadPendingAndCertifiedCars();
-      this.loadAllReviews();
-    }
-
-    this.loadUserData();
-  }
-
-  loadUserData(): void {
-    const userId = +localStorage.getItem('userId')!;
-    this.authService.getUserInfo(userId).subscribe(
-      (data: any) => {
-        this.user = data;
-      },
-      (error) => {
-
-      }
+  ngOnInit(): void {
+    // 1) estado de sesión
+    this.subscriptions.add(
+      this.auth.isSignedIn$.subscribe(isSigned => {
+        this.isSignedIn = isSigned;
+      })
     );
-  }
 
-  loadAllCars() {
-  this.loading = true;
-  this.carService.getCars().subscribe(
-    (response: any) => {
-      const cars = response.items ?? response; // compatibilidad con backend
-      this.cars = this.processCars(cars);
-      this.loading = false;
-    },
-    (error) => {
-      this.showSnackBar('Error fetching cars');
-      this.loading = false;
-    }
-  );
-}
+    // 2) roles
+    this.subscriptions.add(
+      this.auth.roles$.subscribe(roles => {
+        this.isSeller   = roles.includes('SELLER');
+        this.isBuyer    = roles.includes('BUYER');
+        this.isMechanic = roles.includes('TECH_SPECIALIST') || roles.includes('SUPPORT');
 
-
-  loadAllReviews(): void {
-    this.reviewService.getAllReviews().subscribe(
-      (reviewsData) => {
-        this.reviews = reviewsData;
-      },
-      (error) => {
-        this.showSnackBar('Error fetching reviews');
-      }
+        this.loadSections();
+      })
     );
+
+    // 3) catálogo público
+    this.loadPublicCatalog();
   }
 
-  loadPendingAndCertifiedCars() {
-  this.loading = true;
-  this.carService.getCars().subscribe(
-    (response: any) => {
-      const cars = response.items ?? response;
-      this.pendingCars = this.processCars(cars.filter((car: any) => car.status === 'PENDING'));
-      this.certifiedCars = this.processCars(cars.filter((car: any) => car.status === 'REVIEWED'));
-      this.loadReviewsForCertifiedCars(this.certifiedCars);
-      this.loading = false;
-    },
-    (error) => {
-      this.showSnackBar('Error loading cars');
-      this.loading = false;
-    }
-  );
-}
-
-
-  processCars(cars: any[]): any[] {
-    return cars.map(car => {
-      car.mainImage = car.image && car.image.length > 0 ? car.image[0] : this.defaultImage;
-      car.image = car.mainImage;
-      return car;
+  private loadPublicCatalog(): void {
+    this.loading = true;
+    this.vehicleFacade.loadCatalog().subscribe({
+      next: vehicles => {
+        this.cars = vehicles;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error loading catalog', err);
+        this.loading = false;
+      }
     });
   }
 
-  loadReviewsForCertifiedCars(certifiedCars: any[]): void {
-    certifiedCars.forEach(car => {
-      this.reviewService.getReviewsByCarId(car.id).subscribe(
-        (reviews) => {
-          if (reviews && reviews.length > 0) {
-            const reviewUserRequests = reviews.map((review: any) => {
-              return this.authService.getUserInfo(review.reviewedBy).pipe(
-                map(userInfo => ({
-                  ...review,
-                  reviewerInfo: userInfo
-                }))
-              );
-            });
+  private loadSections(): void {
+    // mis vehículos (seller)
+    if (this.isSeller) {
+      this.vehicleFacade.loadMyVehicles().subscribe({
+        next: vehicles => this.myVehicles = vehicles,
+        error: err => console.error('Error loading my vehicles', err)
+      });
+    } else {
+      this.myVehicles = [];
+    }
 
-            forkJoin(reviewUserRequests).subscribe(
-              (reviewsWithUserInfo) => {
-                car.reviews = reviewsWithUserInfo;
-              },
-              (error) => {
-                this.showSnackBar('Error fetching reviewer info');
-              }
-            );
-          }
-        },
-        (error) => {
-          this.showSnackBar('Error fetching reviews');
-        }
-      );
-    });
+    // vehículos en revisión (mecánico)
+    if (this.isMechanic) {
+      this.vehicleFacade.loadUnderReview().subscribe({
+        next: vehicles => this.pendingCars = vehicles,
+        error: err => console.error('Error loading under review vehicles', err)
+      });
+    } else {
+      this.pendingCars = [];
+    }
   }
 
-  viewCarDetails(carId: number) {
-    this.router.navigate(['/car-details', carId]);
+  // navegación / acciones usadas en el HTML
+  viewCarDetails(id: number): void {
+    this.router.navigate(['/cars', id]);
   }
 
-  navigateToCarListingForm() {
-    this.router.navigate(['/car-listing-form']);
+  addToFavorites(id: number): void {
+    // TODO: integrar con microservicio de favoritos
+    console.log('Add to favorites -> vehicle', id);
   }
 
-  startInspection() {
-    this.router.navigate(['/mechanic-revision']);
+  startInspection(): void {
+    // TODO: ruta real del flujo de inspecciones
+    this.router.navigate(['/inspections']);
   }
 
-  addToFavorites(carId: number): void {
-    this.favoriteService.addFavorite(carId).subscribe(
-      response => {
-        this.showSnackBar('Car added to favorites');
-      },
-      error => {
-        this.showSnackBar('Error adding car to favorites');
-      }
-    );
-  }
-
-  trackByCarId(index: number, car: any): number {
-    return car.id;
-  }
-
-  private showSnackBar(message: string) {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000
-    });
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

@@ -1,0 +1,127 @@
+<div class="stepper-container">
+  <!-- Indicador de pasos -->
+  <div class="steps-indicator">
+    <div class="progress-bar" [style.width]="getProgressWidth()"></div>
+
+    <div class="step" [class.active]="currentStep === 1">
+      <i class="material-icons">person</i>
+      {{ 'CONFIRM_DETAILS' | translate }}
+    </div>
+
+    <div class="step" [class.active]="currentStep === 2">
+      <i class="material-icons">edit_note</i>
+      {{ 'SELECT_CONTACT_METHOD' | translate }}
+    </div>
+
+    <div class="step" [class.active]="currentStep === 3">
+      <i class="material-icons">check_circle</i>
+      {{ 'TRANSACTION_CONFIRMATION' | translate }}
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div *ngIf="isLoading" class="loader-container">
+    <div class="loader"></div>
+    <p>{{ 'LOADING_OFFER' | translate }}</p>
+  </div>
+
+  <!-- Paso 1: Datos del usuario -->
+  <div *ngIf="currentStep === 1 && !isLoading" class="step-content">
+    <div class="summary">
+      <h3>{{ 'APPLICANT_INFORMATION' | translate }}</h3>
+      <p><strong>{{ 'NAME' | translate }}:</strong> {{ userData.name }}</p>
+      <p><strong>{{ 'EMAIL' | translate }}:</strong> {{ userData.email }}</p>
+      <p><strong>{{ 'PHONE' | translate }}:</strong> {{ userData.telephone }}</p>
+      <p><strong>{{ 'DNI' | translate }}:</strong> {{ userData.dni }}</p>
+    </div>
+
+    <div class="main-content">
+      <h2>{{ 'CONFIRM_INFORMATION' | translate }}</h2>
+      <p>{{ 'REVIEW_BEFORE_CONTINUING' | translate }}</p>
+      <button class="btn-next" (click)="nextStep()">
+        {{ 'NEXT' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Paso 2: Selección de método de pago -->
+  <div
+    *ngIf="currentStep === 2 && !isLoading && vehicleData"
+    class="step-content"
+  >
+    <div class="summary">
+      <h3>{{ 'VEHICLE_DETAILS' | translate }}</h3>
+      <p><strong>{{ 'MODEL' | translate }}:</strong> {{ vehicleData.model }}</p>
+      <p>
+        <strong>Price:</strong>
+        {{ vehicleData.priceAmount | currency:(vehicleData.priceCurrency || 'PEN') }}
+      </p>
+
+      <!-- Solo mostramos vendedor si existe -->
+      <p *ngIf="sellerData?.name">
+        <strong>{{ 'SELLER' | translate }}:</strong> {{ sellerData.name }}
+      </p>
+    </div>
+
+    <div class="main-content">
+      <h2>{{ 'SELECT_CONTACT_METHOD_PROMPT' | translate }}</h2>
+
+      <div
+        *ngFor="let method of paymentMethods"
+        class="payment-method"
+        [class.selected]="selectedPaymentMethod === method"
+        (click)="selectedPaymentMethod = method"
+      >
+        <strong>{{ method.brand }}</strong> •••• {{ method.last4 }}
+        <div class="method-label">
+          {{ method.label }}
+        </div>
+
+        <div *ngIf="selectedPaymentMethod === method" class="selected-indicator">
+          <i class="material-icons">check_circle</i>
+          {{ 'CONTACT_METHOD_SELECTED' | translate }}
+        </div>
+      </div>
+
+      <div class="button-container">
+        <button (click)="prevStep()">
+          {{ 'PREVIOUS' | translate }}
+        </button>
+        <button [disabled]="!selectedPaymentMethod" (click)="nextStep()">
+          {{ 'NEXT' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paso 3: Resumen y confirmación -->
+  <div
+    *ngIf="currentStep === 3 && !isLoading && vehicleData"
+    class="step-content"
+  >
+    <div class="summary">
+      <h3>{{ 'OFFER_SUMMARY' | translate }}</h3>
+      <p><strong>{{ 'NAME' | translate }}:</strong> {{ userData.name }}</p>
+      <p>
+        <strong>{{ 'VEHICLE_DETAILS' | translate }}:</strong>
+        {{ vehicleData.model }}
+      </p>
+      <p>
+        <strong>{{ 'PAYMENT_METHOD' | translate }}:</strong>
+        {{ selectedPaymentMethod?.label }}
+      </p>
+      <p>
+        <strong>{{ 'DETAILS' | translate }}:</strong>
+        {{ selectedPaymentMethod?.brand }} •••• {{ selectedPaymentMethod?.last4 }}
+      </p>
+    </div>
+
+    <div class="main-content">
+      <h2>{{ 'SENT_OFFER' | translate }}</h2>
+      <p>{{ 'THANK_YOU_MESSAGE' | translate }}</p>
+      <button class="btn-next" (click)="confirmPayment()">
+        {{ 'FINISH' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CarService } from "../../services/car/car.service";
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
+import { Vehicle } from '../../domain/models/vehicle.model';
+import {VehicleFacade} from "../../application/vehicle-facade";
 
 @Component({
   selector: 'app-my-cars',
@@ -9,64 +10,49 @@ import { Router } from "@angular/router";
   styleUrls: ['./my-cars.component.css']
 })
 export class MyCarsComponent implements OnInit {
-  cars: any[] = [];
-  defaultImage: string = 'assets/default_image.jpg';
-  loading: boolean = true;
+  cars: Vehicle[] = [];
+  defaultImage = 'assets/images/cars/default-car.png';
+  loading = true;
 
   constructor(
-    private carService: CarService,
+    private vehicleFacade: VehicleFacade,
     private snackBar: MatSnackBar,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    const userId = +localStorage.getItem('userId')!;
+  ngOnInit(): void {
     this.loading = true;
 
-    this.carService.getCarsByUser(userId).subscribe(
-      (data: any[]) => {
-        this.cars = data.map(car => {
-          if (Array.isArray(car.image) && car.image.length > 0) {
-            car.images = car.image;
-            car.mainImage = car.images[0];
-          } else {
-            car.mainImage = this.defaultImage;
-            car.images = [this.defaultImage];
-          }
-          return car;
-        });
+    this.vehicleFacade.listMyVehicles().subscribe({
+      next: vehicles => {
+        this.cars = vehicles;
         this.loading = false;
       },
-      (error) => {
-        this.snackBar.open('Error fetching cars. Please try again.', 'Close', { duration: 3000 });
+      error: () => {
+        this.snackBar.open('Error fetching your vehicles.', 'Close', { duration: 3000 });
         this.loading = false;
       }
-    );
+    });
   }
 
-  deleteCar(carId: number) {
-    const carToDelete = this.cars.find(car => car.id === carId);
 
-    if (carToDelete && carToDelete.status === 'REVIEWED') {
-      this.snackBar.open('Reviewed cars cannot be deleted.', 'Close', { duration: 3000 });
-      return;
-    }
-    this.carService.deleteCar(carId).subscribe(
-      () => {
-        this.cars = this.cars.filter(car => car.id !== carId);
+  deleteCar(carId: number): void {
+    this.vehicleFacade.deleteVehicle(carId).subscribe({
+      next: () => {
+        this.cars = this.cars.filter(c => c.id !== carId);
         this.snackBar.open('Car deleted successfully.', 'Close', { duration: 3000 });
       },
-      (error) => {
+      error: (error) => {
         if (error.status === 404) {
           this.snackBar.open('Car not found.', 'Close', { duration: 3000 });
         } else {
           this.snackBar.open('Error deleting car. Please try again.', 'Close', { duration: 3000 });
         }
       }
-    );
+    });
   }
 
-  navigateToCarDetails(carId: number) {
-    this.router.navigate(['/car-details', carId]);
+  navigateToCarDetails(carId: number): void {
+    this.router.navigate(['/cars', carId]);
   }
 }

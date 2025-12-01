@@ -1,7 +1,6 @@
+// src/environments/environment.ts
 export const environment = {
-  production: true,
-  // Server Base Path for Fake REST API
-  serverBasePath: 'http://localhost:3000/api/v1'
-  //Server Base Path for Spring Boot REST API
-  //serverBasePath: 'https://Automatch-platform-hpdzhtb8ekceg9gd.canadacentral-01.azurewebsites.net/api/v1'
+  production: false,
+  backendApiBaseUrl: 'http://localhost:8080',          // Gateway
+  apiUrl: 'http://localhost:8080/api/v1'               // Para IAM, VEHICLES, SALES, etc.
 };

@@ -1,0 +1,20 @@
+<div *ngIf="loading">Loading notification...</div>
+<div *ngIf="!loading && error">{{ error }}</div>
+
+<div *ngIf="!loading && !error && notification as n" class="notification-detail-card">
+  <h2>Notification #{{ n.id }}</h2>
+
+  <p><strong>Type:</strong> {{ n.type }}</p>
+  <p><strong>Recipient:</strong> {{ n.recipient }}</p>
+  <p><strong>Status:</strong> {{ n.status }}</p>
+  <p><strong>Source Event:</strong> {{ n.sourceEvent }}</p>
+
+  <p><strong>Created At:</strong> {{ n.createdAt | date : 'short' }}</p>
+  <p *ngIf="n.sentAt"><strong>Sent At:</strong> {{ n.sentAt | date : 'short' }}</p>
+  <p *ngIf="n.failedAt"><strong>Failed At:</strong> {{ n.failedAt | date : 'short' }}</p>
+
+  <h3>Message</h3>
+  <pre class="message-box">{{ n.message }}</pre>
+
+  <a routerLink="/notifications" class="back-link">← Back to list</a>
+</div>

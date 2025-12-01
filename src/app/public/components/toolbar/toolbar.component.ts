@@ -1,9 +1,11 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { catchError, of, forkJoin } from "rxjs";
+// src/app/public/components/toolbar/toolbar.component.ts
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from "../../../../environments/environment";
-import { AuthenticationService } from "../../../register/services/authentication.service";
+import {
+  ProfileService,
+  Profile
+} from '../../../profiles/services/profile.service';
+import { AuthenticationService } from '../../../register/services/authentication.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,109 +13,131 @@ import { AuthenticationService } from "../../../register/services/authentication
   styleUrls: ['./toolbar.component.css']
 })
 export class ToolbarComponent implements OnInit {
-  userRole: string = '';
-  userPhoto: string | null = null;
-  profileData: any;
-  isScrolled = false;
+
+  // IAM
+  isSignedIn = false;
+  username: string | null = null;
+  roles: string[] = [];
+  userRole: string | null = null; // ROLE_SELLER / ROLE_BUYER / ROLE_MECHANIC
+
+  // Profile
+  profileData: Profile | null = null;
+  userPhoto: string = 'assets/default-profile.png'; // fija
+
+  // UI
   isMenuOpen = false;
   showDropdown = false;
-  private hideDropdownTimeout: any;
+  isScrolled = false;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private profileService: ProfileService,
+    private router: Router
   ) {}
 
-  ngOnInit() {
-      window.addEventListener('resize', () => {
-        this.isMenuOpen = false;
-      });
-    this.authService.currentUserRole.subscribe(role => {
-      this.userRole = role;
-    });
-
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
-
-    if (!token || !userId) {
-      console.error('Token or user ID not found');
-      return;
-    }
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
-
-    forkJoin({
-      userProfile: this.http.get<any>(`${environment.apiUrl}/users/${userId}`, { headers }).pipe(
-        catchError(error => {
-          console.error('Error fetching user profile:', error);
-          return of(null);
-        })
-      ),
-      profileData: this.http.get<any>(`${environment.apiUrl}/profiles/me`, { headers }).pipe(
-        catchError(error => {
-          console.error('Error fetching profile data:', error);
-          return of(null);
-        })
-      )
-    }).subscribe(({ userProfile, profileData }) => {
-      if (userProfile) {
-        this.userRole = userProfile.roles[0] || 'User';
-      } else {
-        console.warn('No user profile data returned');
+  ngOnInit(): void {
+    // Suscribirse al estado de IAM
+    this.authService.isSignedIn$.subscribe(isIn => {
+      this.isSignedIn = isIn;
+      if (!isIn) {
+        this.profileData = null;
+        this.userPhoto = 'assets/default-profile.png';
+        this.userRole = null;
       }
+    });
 
-      if (profileData) {
-        this.userPhoto = profileData.image;
-        this.profileData = profileData;
-      } else {
-        console.warn('No profile data returned');
+    this.authService.currentUsername$.subscribe(name => {
+      this.username = name;
+    });
+
+    this.authService.roles$.subscribe(roles => {
+      this.roles = roles || [];
+      this.userRole = this.roles.length ? this.roles[0] : null;
+    });
+
+    // Verificar token al cargar y, si es válido, cargar perfil
+    this.authService.verifyToken().subscribe(isValid => {
+      if (isValid) {
+        this.loadProfile();
+      }
+    });
+
+    // Si otro componente actualiza el perfil, nos enteramos aquí
+    this.profileService.currentProfile$.subscribe(profile => {
+      if (profile) {
+        this.profileData = profile;
       }
     });
   }
 
-  logout() {
-    this.router.navigate(['/login']);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('isSignedIn');
+  private loadProfile(): void {
+    this.profileService.getMyProfile().subscribe({
+      next: profile => {
+        this.profileData = profile;
+        this.userPhoto = 'assets/default-profile.png'; // siempre
+      },
+      error: err => {
+        // Si es 404 => el consumidor de Kafka aún no creó el perfil
+        // o estás en un usuario sin perfil: puedes elegir:
+        // - dejarlo nulo
+        // - redirigir a /profile-form
+        if (err.status === 404) {
+          this.profileData = null;
+          this.userPhoto = 'assets/default-profile.png';
+        }
+      }
+    });
   }
+
+  // Menu / dropdown UI
+  toggleMenu(): void { this.isMenuOpen = !this.isMenuOpen; }
+  closeMenu(): void { this.isMenuOpen = false; }
+  showDropdownMenu(): void { this.showDropdown = true; }
+  hideDropdownMenu(): void { this.showDropdown = false; }
 
   @HostListener('window:scroll', [])
-  onWindowScroll() {
-    const offset = window.pageYOffset;
-    this.isScrolled = offset > 50;
+  onWindowScroll(): void {
+    this.isScrolled = window.scrollY > 10;
   }
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+  // Auth acciones
+  onLogin(): void {
+    this.router.navigate(['/login']).then();
   }
 
-  closeMenu() {
-    this.isMenuOpen = false;
+  onRegister(): void {
+    this.router.navigate(['/register']).then();
   }
 
-  showDropdownMenu() {
-    clearTimeout(this.hideDropdownTimeout);
-    this.showDropdown = true;
-  }
-
-  hideDropdownMenu() {
-    this.hideDropdownTimeout = setTimeout(() => {
-      this.showDropdown = false;
-    }, 200);
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: Event) {
-    const target = event.target as HTMLElement;
-    const isClickInside = target.closest('.navbar') || target.closest('.hamburger');
-    if (!isClickInside && this.isMenuOpen) {
-      this.closeMenu();
-    }
+  logout(): void {
+    this.authService.signOut().subscribe(() => {
+      this.router.navigate(['/login']).then();
+    });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

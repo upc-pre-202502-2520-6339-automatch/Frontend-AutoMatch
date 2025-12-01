@@ -1,8 +1,0 @@
-.container { max-width: 1100px; margin: 0 auto; padding: 24px; }
-.header { display:flex; justify-content:space-between; align-items:end; margin-bottom: 12px; }
-.title { font-size: 28px; letter-spacing: 2px; margin: 0; }
-.black-text { color:#111; } .yellow-text { color:#FFC107; }
-.underline { width: 120px; height: 4px; background:#FFC107; border-radius: 4px; margin-top: 8px; }
-.button-container { display:flex; align-items:center; }
-.redirect-button { padding:10px 16px; border-radius:10px; border:none; background:#111; color:#fff; cursor:pointer; }
-.content { display:flex; flex-direction:column; gap: 10px; margin-top: 16px; line-height:1.5; }

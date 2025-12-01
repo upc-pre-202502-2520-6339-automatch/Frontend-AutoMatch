@@ -1,216 +1,63 @@
-<div class="container">
-  <div class="profile-container">
-    <!-- ✅ Quitar temporalmente el switcher si no está importado correctamente -->
-    <!-- <app-language-switcher></app-language-switcher> -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
 
-    <form (ngSubmit)="onSubmit()" class="profile-form">
-      <!-- Datos personales -->
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'FIRST_NAME' | translate }}</mat-label>
-          <input
-            matInput
-            id="firstName"
-            type="text"
-            [(ngModel)]="profile.firstName"
-            name="firstName"
-            placeholder="{{ 'FIRST_NAME' | translate }}"
-            required
-          />
-        </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName">
+  </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'LAST_NAME' | translate }}</mat-label>
-          <input
-            matInput
-            id="lastName"
-            type="text"
-            [(ngModel)]="profile.lastName"
-            name="lastName"
-            placeholder="{{ 'LAST_NAME' | translate }}"
-            required
-          />
-        </mat-form-field>
-      </div>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName">
+  </mat-form-field>
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'EMAIL' | translate }}</mat-label>
-          <input
-            matInput
-            id="email"
-            type="email"
-            [(ngModel)]="profile.email"
-            name="email"
-            placeholder="{{ 'EMAIL' | translate }}"
-            required
-          />
-        </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+  </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'DNI' | translate }}</mat-label>
-          <input
-            matInput
-            id="dni"
-            type="text"
-            [(ngModel)]="profile.dni"
-            name="dni"
-            placeholder="{{ 'DNI' | translate }}"
-            required
-          />
-        </mat-form-field>
-      </div>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Phone Number</mat-label>
+    <input matInput formControlName="phoneNumber">
+  </mat-form-field>
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'ADDRESS' | translate }}</mat-label>
-          <input
-            matInput
-            id="address"
-            type="text"
-            [(ngModel)]="profile.address"
-            name="address"
-            placeholder="{{ 'ADDRESS' | translate }}"
-            required
-          />
-        </mat-form-field>
+  <!-- Rol de perfil (no confundir con roles del JWT) -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Profile Role</mat-label>
+    <mat-select formControlName="roleType">
+      <mat-option *ngFor="let r of roleTypes" [value]="r">{{ r }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-group">
-          <mat-label>{{ 'PHONE_NUMBER' | translate }}</mat-label>
-          <input
-            matInput
-            id="phone"
-            type="text"
-            [(ngModel)]="profile.phone"
-            name="phone"
-            placeholder="{{ 'PHONE_NUMBER' | translate }}"
-            required
-          />
-        </mat-form-field>
-      </div>
+  <!-- Campos de vendedor solo si roleType === 'SELLER' -->
+  <ng-container *ngIf="form.get('roleType')?.value === 'SELLER'">
 
-      <!-- Imagen de perfil -->
-      <div class="new-images">
-        <button type="button" (click)="triggerFileInput()">
-          <svg
-            aria-hidden="true"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-width="2"
-              stroke="#ffffff"
-              d="M13.5 3H12H8C6.34315 3 5 4.34315 5 6V18C5 19.6569 6.34315 21 8 21H11M13.5 3L19 8.625M13.5 3V7.625C13.5 8.17728 13.9477 8.625 14.5 8.625H19M19 8.625V11.8125"
-              stroke-linejoin="round"
-              stroke-linecap="round"
-            ></path>
-            <path
-              stroke-linejoin="round"
-              stroke-linecap="round"
-              stroke-width="2"
-              stroke="#ffffff"
-              d="M17 15V18M17 21V18M17 18H14M17 18H20"
-            ></path>
-          </svg>
-          {{ 'ADD_PHOTO' | translate }}
-        </button>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>RUC</mat-label>
+      <input matInput formControlName="ruc">
+    </mat-form-field>
 
-        <input
-  id="newImages"
-  type="file"
-  (change)="onFileSelected($event)"
-  class="hidden-file-input"
-/>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Business Type</mat-label>
+      <mat-select formControlName="businessType">
+        <mat-option *ngFor="let b of businessTypes" [value]="b">{{ b }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Business Name</mat-label>
+      <input matInput formControlName="businessName">
+    </mat-form-field>
 
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address">
+    </mat-form-field>
 
+  </ng-container>
 
-        <div *ngIf="photoPreview" class="image-preview-container">
-          <img [src]="photoPreview" alt="Preview" class="image-preview" />
-          <span
-            class="delete-icon material-symbols-outlined"
-            (click)="removeImage()"
-          >
-            delete
-          </span>
-        </div>
-      </div>
+  <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+    {{ loading ? 'Saving...' : 'Save Profile' }}
+  </button>
 
-      <!-- Métodos de pago -->
-      <div *ngIf="userRole === 'ROLE_SELLER'">
-        <h3>{{ 'PAYMENT_METHODS' | translate }}</h3>
-        <div
-          *ngFor="let method of profile.paymentMethods; let i = index"
-          class="form-row"
-        >
-          <mat-form-field appearance="outline" class="form-group">
-            <mat-label>{{ 'PAYMENT_TYPE' | translate }}</mat-label>
-            <mat-select
-              [(ngModel)]="method.type"
-              name="type-{{ i }}"
-              required
-              (ngModelChange)="checkFormValidity()"
-            >
-              <mat-option *ngFor="let bank of banks" [value]="bank">
-                {{ bank }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="form-group">
-            <mat-label>{{ 'PAYMENT_DETAILS' | translate }}</mat-label>
-            <input
-              matInput
-              id="details-{{ i }}"
-              type="text"
-              [(ngModel)]="method.details"
-              name="details-{{ i }}"
-              placeholder="{{ 'PAYMENT_DETAILS_PLACEHOLDER' | translate }}"
-              required
-              pattern="^[0-9]{12,20}$"
-              (ngModelChange)="checkFormValidity()"
-            />
-            <mat-error
-              *ngIf="method.details && !method.details.match('^[0-9]{12,20}$')"
-            >
-              {{ 'PAYMENT_DETAILS_ERROR' | translate }}
-            </mat-error>
-          </mat-form-field>
-
-          <button
-            mat-icon-button
-            color="warn"
-            type="button"
-            (click)="removePaymentMethod(i)"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-
-        <button
-          mat-button
-          color="primary"
-          type="button"
-          (click)="addPaymentMethod()"
-          [disabled]="profile.paymentMethods.length >= 3"
-        >
-          {{ 'ADD_PAYMENT_METHOD' | translate }}
-        </button>
-      </div>
-
-      <div class="form-actions">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="!isFormValid"
-        >
-          {{ 'SAVE_CHANGES' | translate }}
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+</form>

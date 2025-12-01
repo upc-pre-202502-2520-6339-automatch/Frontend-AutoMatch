@@ -1,0 +1,154 @@
+<!-- Loader Section
+
+<div *ngIf="isLoading" class="loader-container">
+  <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
+  <p>{{ 'LOADER' | translate}}</p>
+</div>
+<div *ngIf="userRole === 'ROLE_SELLER' && filteredTransactions.length > 0"  class="car-header">
+  <div class="icon-wrapper">
+    <div class="icon-circle">
+      <i class="fa fa-star"></i>
+    </div>
+    <div class="header-underline"></div>
+  </div>
+  <div class="text-content">
+    <h2>{{ 'OFFERS' | translate}}</h2>
+    <span>{{ 'RECEIVED_OFFERS' | translate }}</span>
+  </div>
+</div>
+
+  <div *ngIf="userRole === 'ROLE_BUYER' && filteredTransactions.length > 0"  class="car-header">
+    <div class="icon-wrapper">
+      <div class="icon-circle">
+        <i class="fa fa-star"></i>
+      </div>
+      <div class="header-underline"></div>
+    </div>
+    <div class="text-content">
+      <h2>{{ 'OFFERS' | translate}}</h2>
+      <span>{{ 'SENT_OFFERS' | translate }}</span>
+    </div>
+  </div>
+<div *ngIf="!isLoading">
+  <div class="filter-container">
+    <mat-form-field appearance="fill" class="filter-dropdown">
+      <mat-label>{{ 'FILTER_BY_STATUS' | translate }}</mat-label>
+      <mat-select [(value)]="selectedStatus" (selectionChange)="applyFilter()">
+        <mat-option [value]="'ALL'">{{ 'ALL' | translate }}</mat-option>
+        <mat-option [value]="'PENDING'">{{ 'PENDING' | translate }}</mat-option>
+        <mat-option [value]="'COMPLETED'">{{ 'COMPLETED' | translate }}</mat-option>
+        <mat-option [value]="'CANCELLED'">{{ 'CANCELLED' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="userRole === 'ROLE_SELLER' && filteredTransactions.length > 0">
+    <div class="transaction-container">
+      <mat-card *ngFor="let transaction of filteredTransactions" class="transaction-card">
+        <div class="horizontal-card-content">
+          <img
+            routerLink="/car-details/{{ transaction.vehicle.id }}"
+            mat-card-image
+            [src]="transaction.vehicle.images[0]"
+            alt="Imagen del vehículo"
+            class="vehicle-image"
+          />
+
+          <div class="transaction-details">
+            <mat-card-content>
+              <h4>{{ 'TRANSACTION_DETAILS' | translate }}</h4>
+              <p><strong>{{ 'STATUS' | translate }}:</strong> {{ transaction.paymentStatus }}</p>
+              <p><strong>{{ 'AMOUNT' | translate }}:</strong> ${{ transaction.amount }}</p>
+              <p><strong>{{ 'DATE' | translate }}:</strong> {{ transaction.createdAt | date }}</p>
+            </mat-card-content>
+          </div>
+
+          <div class="buyer-details">
+            <mat-card-content>
+              <h4>{{ 'BUYER_INFORMATION' | translate }}</h4>
+              <p><strong>{{ 'NAME' | translate }}:</strong> {{ transaction.buyer.name.fullName }}</p>
+              <p><strong>{{ 'EMAIL' | translate }}:</strong> {{ transaction.buyer.email }}</p>
+              <p><strong>{{ 'PHONE' | translate }}</strong> {{ transaction.buyer.phone }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button
+                mat-raised-button
+                color="primary"
+                *ngIf="transaction.paymentStatus === 'PENDING'"
+                (click)="updateTransactionStatus(transaction.transactionId, 'COMPLETED')"
+              >
+              {{ 'ACCEPT' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                *ngIf="transaction.paymentStatus === 'PENDING'"
+                (click)="updateTransactionStatus(transaction.transactionId, 'CANCELLED')"
+              >
+              {{ 'CANCEL' | translate }}
+              </button>
+              <p *ngIf="transaction.paymentStatus === 'COMPLETED'" class="completed-status">
+                {{ 'TRANSACTION_COMPLETED' | translate }}
+              </p>
+              <p *ngIf="transaction.paymentStatus === 'CANCELLED'" class="cancelled-status">
+                {{ 'TRANSACTION_CANCELLED' | translate }}
+              </p>
+            </mat-card-actions>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="userRole === 'ROLE_BUYER' && filteredTransactions.length > 0">
+    <div class="transaction-container">
+      <mat-card *ngFor="let transaction of filteredTransactions" class="transaction-card">
+        <div class="horizontal-card-content">
+          <img
+            routerLink="/car-details/{{ transaction.vehicle.id }}"
+            mat-card-image
+            [src]="transaction.vehicle.images[0]"
+            alt="Imagen del vehículo"
+            class="vehicle-image"
+          />
+
+          <div class="transaction-details">
+            <mat-card-content>
+              <h4>{{ 'TRANSACTION_DETAILS' | translate }}</h4>
+              <p><strong>{{ 'VEHICLE' | translate }}:</strong> {{ transaction.vehicle.brand }} {{ transaction.vehicle.model }}</p>
+              <p><strong>{{ 'AMOUNT' | translate }}:</strong> ${{ transaction.amount }}</p>
+              <p><strong>{{ 'DATE' | translate }}:</strong> {{ transaction.createdAt | date }}</p>
+              <p><strong>{{ 'STATUS' | translate }}:</strong> {{ transaction.paymentStatus }}</p>
+            </mat-card-content>
+          </div>
+
+          <div class="seller-details">
+            <mat-card-content>
+              <h4>{{ 'SELLER_INFORMATION' | translate }}</h4>
+              <p><strong>{{ 'NAME' | translate }}:</strong> {{ transaction.seller.name.fullName }}</p>
+              <p><strong>{{ 'EMAIL' | translate }}:</strong> {{ transaction.seller.email }}</p>
+              <p><strong>{{ 'PHONE' | translate }}:</strong> {{ transaction.seller.phone }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <p *ngIf="transaction.paymentStatus === 'PENDING'" class="pending-status">
+                {{ 'PENDING_MESSAGE' | translate }}
+              </p>
+              <p *ngIf="transaction.paymentStatus === 'COMPLETED'" class="completed-status">
+                {{ 'COMPLETED_MESSAGE' | translate }}
+              </p>
+              <p *ngIf="transaction.paymentStatus === 'CANCELLED'" class="cancelled-status">
+                {{ 'CANCELLED_MESSAGE' | translate }}
+              </p>
+            </mat-card-actions>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+
+  <div *ngIf="filteredTransactions.length === 0" class="no-transactions">
+    <mat-icon color="warn">info</mat-icon>
+    <p>{{ 'NO_TRANSACTIONS_AVAILABLE' | translate }}</p>
+  </div>
+</div>-->

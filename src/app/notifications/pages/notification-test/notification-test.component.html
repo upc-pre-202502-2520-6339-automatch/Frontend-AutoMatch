@@ -1,0 +1,66 @@
+<h2>Send test notification</h2>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="notification-form">
+  <div class="form-row">
+    <label for="type">Type</label>
+    <select id="type" formControlName="type">
+      <option value="SMS">SMS</option>
+      <option value="WHATSAPP">WhatsApp</option>
+      <option value="EMAIL">Email</option>
+    </select>
+  </div>
+
+  <div class="form-row">
+    <label for="recipient">Recipient</label>
+    <input
+      id="recipient"
+      type="text"
+      formControlName="recipient"
+      placeholder="+51999999999"
+    />
+    <small *ngIf="form.get('recipient')?.invalid && form.get('recipient')?.touched">
+      Recipient is required.
+    </small>
+  </div>
+
+  <div class="form-row">
+    <label for="sourceEvent">Source event (optional)</label>
+    <input
+      id="sourceEvent"
+      type="text"
+      formControlName="sourceEvent"
+      placeholder="SALE_PAID, PAYMENT_CONFIRMED, etc."
+    />
+  </div>
+
+  <div class="form-row">
+    <label for="message">Message</label>
+    <textarea
+      id="message"
+      rows="4"
+      formControlName="message"
+      placeholder="Write the message to send..."
+    ></textarea>
+    <small *ngIf="form.get('message')?.invalid && form.get('message')?.touched">
+      Message is required (max 500 characters).
+    </small>
+  </div>
+
+  <button type="submit" [disabled]="sending || form.invalid">
+    {{ sending ? 'Sending...' : 'Send notification' }}
+  </button>
+</form>
+
+<div *ngIf="error" class="error-box">
+  {{ error }}
+</div>
+
+<div *ngIf="lastNotification" class="result-box">
+  <h3>Last notification sent</h3>
+  <p><strong>ID:</strong> {{ lastNotification.id }}</p>
+  <p><strong>Status:</strong> {{ lastNotification.status }}</p>
+  <p><strong>Created At:</strong> {{ lastNotification.createdAt | date : 'short' }}</p>
+  <p *ngIf="lastNotification.sentAt">
+    <strong>Sent At:</strong> {{ lastNotification.sentAt | date : 'short' }}
+  </p>
+</div>

@@ -1,0 +1,13 @@
+<!-- conversations.component.html -->
+<div *ngIf="!loading; else convLoading">
+  <div *ngFor="let c of conversations"
+       class="conversation-item"
+       (click)="openConversation(c)">
+    <div>Conversación #{{ c.id }}</div>
+    <small>Último mensaje: {{ c.lastMessagePreview }}</small>
+  </div>
+</div>
+
+<ng-template #convLoading>
+  <p>Cargando conversaciones...</p>
+</ng-template>

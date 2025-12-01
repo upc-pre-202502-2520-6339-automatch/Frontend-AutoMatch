@@ -1,78 +1,73 @@
-<div  class="car-wrapper">
+<div class="car-wrapper">
   <div *ngIf="loading" class="loader-container">
     <mat-progress-spinner color="primary" mode="indeterminate"></mat-progress-spinner>
     <p>{{ 'LOADER' | translate }}</p>
   </div>
-  <div *ngIf="!loading">
-  <div *ngIf="cars.length > 0" class="car-header">
-    <div class="icon-wrapper">
-      <div class="icon-circle">
-        <i class="fa fa-car"></i>
-      </div>
-      <div class="header-underline"></div>
-    </div>
-    <div class="text-content">
-      <h2>{{ 'MY_CARS' | translate }}</h2>
-      <span>{{ 'CARS_LISTED_MESSAGE' | translate }}</span>
-    </div>
-  </div>
 
-  <div class="car-container">
-    <div *ngIf="cars.length === 0" class="no-cars-message">
+  <div *ngIf="!loading">
+    <div *ngIf="cars.length > 0" class="car-header">
       <div class="icon-wrapper">
-        <i class="fa fa-heart-broken"></i>
+        <div class="icon-circle">
+          <i class="fa fa-car"></i>
+        </div>
+        <div class="header-underline"></div>
       </div>
-      <p>{{ 'NO_CARS_LISTED' | translate }} <a routerLink="/car-listing-form">{{ 'CREATE_NEW_CAR' | translate }}</a>.</p>
+      <div class="text-content">
+        <h2>{{ 'MY_CARS' | translate }}</h2>
+        <span>{{ 'CARS_LISTED_MESSAGE' | translate }}</span>
+      </div>
     </div>
-    <div *ngFor="let car of cars" class="car-item" (click)="navigateToCarDetails(car.id)">
-      <div class="thumb-content">
-        <div class="car-banner"></div>
-        <div class="thumb-inner">
-          <div class="image-wrapper">
-            <img [src]="car.mainImage" alt="{{ car.title }}" class="img-thumbnail" width="150">
+
+    <div class="car-container">
+      <div *ngIf="cars.length === 0" class="no-cars-message">
+        <div class="icon-wrapper">
+          <i class="fa fa-heart-broken"></i>
+        </div>
+        <p>
+          {{ 'NO_CARS_LISTED' | translate }}
+          <a routerLink="/car-listing-form">{{ 'CREATE_NEW_CAR' | translate }}</a>.
+        </p>
+      </div>
+
+      <div *ngFor="let car of cars" class="car-item" (click)="navigateToCarDetails(car.id)">
+        <div class="thumb-content">
+          <div class="thumb-inner">
+            <div class="image-wrapper">
+              <img
+                [src]="car.mainImageUrl || defaultImage"
+                alt="{{ car.brand }} {{ car.model }}"
+                class="img-thumbnail"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="down-content">
-        <div class="title-favorite-wrapper">
-          <a>
-            <h4>{{ car.brand }} {{ car.model }}</h4>
-          </a>
-          <button class="delete-button" (click)="deleteCar(car.id); $event.stopPropagation()">
-            <i class="fa fa-trash"></i>
-          </button>
+        <div class="down-content">
+          <div class="title-favorite-wrapper">
+            <a><h4>{{ car.brand }} {{ car.model }}</h4></a>
+            <button class="delete-button" (click)="deleteCar(car.id); $event.stopPropagation()">
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+          <p>{{ car.status }}</p>
+          <span>{{ car.priceAmount | currency: car.priceCurrency }}</span>
+          <p>{{ car.plate }}</p>
+          <ul class="car-info">
+            <li>
+              <div class="item">
+                <i class="fas fa-calendar"></i>
+                <p>{{ car.year }}</p>
+              </div>
+            </li>
+            <li>
+              <div class="item">
+                <i class="fas fa-road"></i>
+                <p>{{ car.mileageKm | number }} km</p>
+              </div>
+            </li>
+          </ul>
         </div>
-        <p>{{ car.status }}</p>
-        <span>{{ car.price | currency }}</span>
-        <p>{{ car.description }}</p>
-        <ul class="car-info">
-          <li>
-            <div class="item">
-              <i class="fas fa-calendar"></i>
-              <p>{{ car.year }}</p>
-            </div>
-          </li>
-          <li>
-            <div class="item">
-              <i class="fas fa-road"></i>
-              <p>{{ car.speed }}{{ 'SPEED_UNIT' | translate }}</p>
-            </div>
-          </li>
-          <li>
-            <div class="item">
-              <i class="fas fa-gas-pump"></i>
-              <p>{{ car.mileage }}{{ 'MILEAGE_UNIT' | translate }}</p>
-            </div>
-          </li>
-          <li>
-            <div class="item">
-              <i class="fas fa-gas-pump"></i>
-              <p>{{ car.fuel }}</p>
-            </div>
-          </li>
-        </ul>
       </div>
+
     </div>
-  </div>
   </div>
 </div>

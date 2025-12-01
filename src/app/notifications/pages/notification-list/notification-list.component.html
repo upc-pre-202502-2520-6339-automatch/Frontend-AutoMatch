@@ -1,0 +1,37 @@
+<div class="notifications-header">
+  <h2>Notifications</h2>
+
+  <a routerLink="/notifications/test" class="test-link">
+    Send test notification
+  </a>
+</div>
+
+<div *ngIf="loading">Loading notifications...</div>
+<div *ngIf="!loading && error">{{ error }}</div>
+
+<table *ngIf="!loading && !error && notifications.length > 0" class="notifications-table">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Type</th>
+    <th>Recipient</th>
+    <th>Status</th>
+    <th>Source Event</th>
+    <th>Created At</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let n of notifications" (click)="openDetail(n)" class="clickable-row">
+    <td>{{ n.id }}</td>
+    <td>{{ n.type }}</td>
+    <td>{{ n.recipient }}</td>
+    <td>{{ n.status }}</td>
+    <td>{{ n.sourceEvent }}</td>
+    <td>{{ n.createdAt | date : 'short' }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!loading && !error && notifications.length === 0">
+  No notifications found.
+</div>

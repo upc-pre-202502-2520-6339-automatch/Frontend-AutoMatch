@@ -1,186 +1,73 @@
-<header [ngClass]="{'scrolled-header': isScrolled}" class="site-header">
-  <header *ngIf="userRole === 'ROLE_SELLER'" class="site-header">
+<!-- src/app/public/components/toolbar/toolbar.component.html -->
+
+<header
+  *ngIf="isSignedIn"
+  [ngClass]="{'scrolled-header': isScrolled}"
+  class="site-header"
+>
+
+  <!-- Navbar para SELLER -->
+  <ng-container *ngIf="userRole === 'SELLER'">
     <nav class="navbar">
       <div class="logo">
         <a><img src="assets/logo.png" alt="Car 2 Go"></a>
       </div>
+
       <ul class="nav-links" [class.active]="isMenuOpen">
         <li class="user-info" *ngIf="isMenuOpen">
           <div class="user-details">
             <img [src]="userPhoto" alt="User Photo" class="responsive-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
           </div>
           <app-language-switcher class="language-switcher-item"></app-language-switcher>
         </li>
+
         <li><a routerLink="/car-listing-form" (click)="closeMenu()">{{ 'SELL_CARS' | translate }}</a></li>
         <li><a routerLink="/my-cars" (click)="closeMenu()">{{ 'MY_CARS' | translate }}</a></li>
         <li><a routerLink="/offers" (click)="closeMenu()">{{ 'OFFERS' | translate }}</a></li>
+
         <li *ngIf="isMenuOpen">
           <a routerLink="/profile" (click)="closeMenu()">
             {{ 'PROFILE' | translate }}
           </a>
         </li>
-        <li routerLink="/login"  *ngIf="isMenuOpen">
-          <a (click)="logout(); closeMenu()">
-            {{ 'LOGOUT' | translate }}
-          </a>
-        </li>
-      </ul>
-      <app-language-switcher class="language-switcher-item" *ngIf="!isMenuOpen"></app-language-switcher>
 
-
-      <div class="profile-dropdown" (mouseenter)="showDropdownMenu()" (mouseleave)="hideDropdownMenu()" *ngIf="!isMenuOpen">
-        <div class="profile-icon">
-          <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile Photo" class="profile-photo">
-          <i *ngIf="!userPhoto" class="material-icons">account_circle</i>
-        </div>
-        <div class="dropdown-menu" *ngIf="showDropdown">
-          <div class="user-info">
-            <img [src]="userPhoto" alt="User Photo" class="dropdown-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
-          </div>
-          <a class="menu-item" routerLink="/profile" (click)="closeMenu()">
-            <i class="material-icons">person</i>
-            {{ 'PROFILE' | translate }}
-            <span class="arrow material-icons">chevron_right</span>
-          </a>
-          <a class="menu-item" (click)="logout(); closeMenu()">
-            <i routerLink="/login" class="material-icons">logout</i>
-            {{ 'LOGOUT' | translate }}
-            <span class="arrow material-icons">chevron_right</span>
-          </a>
-        </div>
-
-      </div>
-
-      <div class="hamburger" (click)="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </nav>
-  </header>
-
-
-
-
-  <!-- Navbar para Buyer -->
-  <header *ngIf="userRole === 'ROLE_BUYER'" class="site-header">
-    <nav class="navbar">
-      <div class="logo">
-        <a><img src="assets/logo.png" alt="Car 2 Go"></a>
-      </div>
-      <ul class="nav-links" [class.active]="isMenuOpen">
-        <li class="user-info" *ngIf="isMenuOpen">
-          <div class="user-details">
-            <img [src]="userPhoto" alt="User Photo" class="responsive-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
-          </div>
-          <app-language-switcher class="language-switcher-item"></app-language-switcher>
-        </li>
-        <li><a routerLink="/home" (click)="closeMenu()">{{ 'HOME' | translate }}</a></li>
-        <li><a routerLink="/favorites" (click)="closeMenu()">{{ 'MY_FAVORITES' | translate }}</a></li>
-        <li><a routerLink="/car-listing" (click)="closeMenu()">{{ 'CAR_LISTING' | translate }}</a></li>
-        <li><a routerLink="/offers" (click)="closeMenu()">{{ 'OFFERS' | translate }}</a></li>
-        <li *ngIf="isMenuOpen">
-          <a routerLink="/profile" (click)="closeMenu()">
-            {{ 'PROFILE' | translate }}
-          </a>
-        </li>
         <li *ngIf="isMenuOpen">
           <a routerLink="/login" (click)="logout(); closeMenu()">
             {{ 'LOGOUT' | translate }}
           </a>
         </li>
       </ul>
+
       <app-language-switcher class="language-switcher-item" *ngIf="!isMenuOpen"></app-language-switcher>
 
-
-      <div class="profile-dropdown" (mouseenter)="showDropdownMenu()" (mouseleave)="hideDropdownMenu()" *ngIf="!isMenuOpen">
+      <div class="profile-dropdown"
+           (mouseenter)="showDropdownMenu()"
+           (mouseleave)="hideDropdownMenu()"
+           *ngIf="!isMenuOpen">
         <div class="profile-icon">
           <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile Photo" class="profile-photo">
           <i *ngIf="!userPhoto" class="material-icons">account_circle</i>
         </div>
+
         <div class="dropdown-menu" *ngIf="showDropdown">
           <div class="user-info">
             <img [src]="userPhoto" alt="User Photo" class="dropdown-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
           </div>
+
           <a class="menu-item" routerLink="/profile" (click)="closeMenu()">
             <i class="material-icons">person</i>
             {{ 'PROFILE' | translate }}
             <span class="arrow material-icons">chevron_right</span>
           </a>
+
           <a class="menu-item" (click)="logout(); closeMenu()">
-            <i routerLink="/login" class="material-icons">logout</i>
-            {{ 'LOGOUT' | translate }}
-            <span class="arrow material-icons">chevron_right</span>
-          </a>
-        </div>
-
-      </div>
-
-      <div class="hamburger" (click)="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Navbar para Mechanic -->
-  <header *ngIf="userRole === 'ROLE_MECHANIC'" class="site-header">
-    <nav class="navbar">
-      <div class="logo">
-        <a><img src="assets/logo.png" alt="Car 2 Go"></a>
-      </div>
-      <ul class="nav-links" [class.active]="isMenuOpen">
-        <li class="user-info" *ngIf="isMenuOpen">
-          <div class="user-details">
-            <img [src]="userPhoto" alt="User Photo" class="responsive-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
-          </div>
-          <app-language-switcher class="language-switcher-item"></app-language-switcher>
-        </li>
-        <li><a routerLink="/home" (click)="closeMenu()">{{ 'HOME' | translate }}</a></li>
-        <li><a routerLink="/mechanic-revision" (click)="closeMenu()">{{ 'UNINSPECTED_CARS' | translate }}</a></li>
-        <li><a routerLink="/mechanic-check" (click)="closeMenu()">{{ 'REVIEWED_CARS' | translate }}</a></li>
-        <li *ngIf="isMenuOpen">
-          <a routerLink="/profile" (click)="closeMenu()">
-            {{ 'PROFILE' | translate }}
-          </a>
-        </li>
-        <li *ngIf="isMenuOpen">
-          <a routerLink="/login" (click)="logout(); closeMenu()">
-            {{ 'LOGOUT' | translate }}
-          </a>
-        </li>
-      </ul>
-      <app-language-switcher class="language-switcher-item" *ngIf="!isMenuOpen"></app-language-switcher>
-
-
-      <div class="profile-dropdown" (mouseenter)="showDropdownMenu()" (mouseleave)="hideDropdownMenu()" *ngIf="!isMenuOpen">
-        <div class="profile-icon">
-          <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile Photo" class="profile-photo">
-          <i *ngIf="!userPhoto" class="material-icons">account_circle</i>
-        </div>
-        <div class="dropdown-menu" *ngIf="showDropdown">
-          <div class="user-info">
-            <img [src]="userPhoto" alt="User Photo" class="dropdown-profile-photo">
-            <span class="user-name">{{ profileData?.firstName || 'User' }}</span>
-          </div>
-          <a class="menu-item" routerLink="/profile" (click)="closeMenu()">
-            <i class="material-icons">person</i>
-            {{ 'PROFILE' | translate }}
-            <span class="arrow material-icons">chevron_right</span>
-          </a>
-          <a class="menu-item" routerLink="/login" (click)="logout(); closeMenu()">
             <i class="material-icons">logout</i>
             {{ 'LOGOUT' | translate }}
             <span class="arrow material-icons">chevron_right</span>
           </a>
         </div>
-
       </div>
 
       <div class="hamburger" (click)="toggleMenu()">
@@ -189,8 +76,154 @@
         <div></div>
       </div>
     </nav>
-  </header>
+  </ng-container>
+
+  <!-- Navbar para BUYER -->
+  <ng-container *ngIf="userRole === 'BUYER'">
+    <nav class="navbar">
+      <div class="logo">
+        <a><img src="assets/logo.png" alt="Car 2 Go"></a>
+      </div>
+
+      <ul class="nav-links" [class.active]="isMenuOpen">
+        <li class="user-info" *ngIf="isMenuOpen">
+          <div class="user-details">
+            <img [src]="userPhoto" alt="User Photo" class="responsive-profile-photo">
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
+          </div>
+          <app-language-switcher class="language-switcher-item"></app-language-switcher>
+        </li>
+
+        <li><a routerLink="/home" (click)="closeMenu()">{{ 'HOME' | translate }}</a></li>
+        <li><a routerLink="/favorites" (click)="closeMenu()">{{ 'MY_FAVORITES' | translate }}</a></li>
+        <li><a routerLink="/car-listing" (click)="closeMenu()">{{ 'CAR_LISTING' | translate }}</a></li>
+        <li><a routerLink="/offers" (click)="closeMenu()">{{ 'OFFERS' | translate }}</a></li>
+
+        <li *ngIf="isMenuOpen">
+          <a routerLink="/profile" (click)="closeMenu()">
+            {{ 'PROFILE' | translate }}
+          </a>
+        </li>
+
+        <li *ngIf="isMenuOpen">
+          <a routerLink="/login" (click)="logout(); closeMenu()">
+            {{ 'LOGOUT' | translate }}
+          </a>
+        </li>
+      </ul>
+
+      <app-language-switcher class="language-switcher-item" *ngIf="!isMenuOpen"></app-language-switcher>
+
+      <div class="profile-dropdown"
+           (mouseenter)="showDropdownMenu()"
+           (mouseleave)="hideDropdownMenu()"
+           *ngIf="!isMenuOpen">
+        <div class="profile-icon">
+          <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile Photo" class="profile-photo">
+          <i *ngIf="!userPhoto" class="material-icons">account_circle</i>
+        </div>
+
+        <div class="dropdown-menu" *ngIf="showDropdown">
+          <div class="user-info">
+            <img [src]="userPhoto" alt="User Photo" class="dropdown-profile-photo">
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
+          </div>
+
+          <a class="menu-item" routerLink="/profile" (click)="closeMenu()">
+            <i class="material-icons">person</i>
+            {{ 'PROFILE' | translate }}
+            <span class="arrow material-icons">chevron_right</span>
+          </a>
+
+          <a class="menu-item" (click)="logout(); closeMenu()">
+            <i class="material-icons">logout</i>
+            {{ 'LOGOUT' | translate }}
+            <span class="arrow material-icons">chevron_right</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hamburger" (click)="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </nav>
+  </ng-container>
+
+  <!-- Navbar para MECHANIC -->
+  <ng-container *ngIf="userRole === 'MECHANIC'">
+    <nav class="navbar">
+      <div class="logo">
+        <a><img src="assets/logo.png" alt="Car 2 Go"></a>
+      </div>
+
+      <ul class="nav-links" [class.active]="isMenuOpen">
+        <li class="user-info" *ngIf="isMenuOpen">
+          <div class="user-details">
+            <img [src]="userPhoto" alt="User Photo" class="responsive-profile-photo">
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
+          </div>
+          <app-language-switcher class="language-switcher-item"></app-language-switcher>
+        </li>
+
+        <li><a routerLink="/home" (click)="closeMenu()">{{ 'HOME' | translate }}</a></li>
+        <li><a routerLink="/mechanic-revision" (click)="closeMenu()">{{ 'UNINSPECTED_CARS' | translate }}</a></li>
+        <li><a routerLink="/mechanic-check" (click)="closeMenu()">{{ 'REVIEWED_CARS' | translate }}</a></li>
+
+        <li *ngIf="isMenuOpen">
+          <a routerLink="/profile" (click)="closeMenu()">
+            {{ 'PROFILE' | translate }}
+          </a>
+        </li>
+
+        <li *ngIf="isMenuOpen">
+          <a routerLink="/login" (click)="logout(); closeMenu()">
+            {{ 'LOGOUT' | translate }}
+          </a>
+        </li>
+      </ul>
+
+      <app-language-switcher class="language-switcher-item" *ngIf="!isMenuOpen"></app-language-switcher>
+
+      <div class="profile-dropdown"
+           (mouseenter)="showDropdownMenu()"
+           (mouseleave)="hideDropdownMenu()"
+           *ngIf="!isMenuOpen">
+        <div class="profile-icon">
+          <img *ngIf="userPhoto" [src]="userPhoto" alt="Profile Photo" class="profile-photo">
+          <i *ngIf="!userPhoto" class="material-icons">account_circle</i>
+        </div>
+
+        <div class="dropdown-menu" *ngIf="showDropdown">
+          <div class="user-info">
+            <img [src]="userPhoto" alt="User Photo" class="dropdown-profile-photo">
+            <span class="user-name">{{ profileData?.firstName || username || 'User' }}</span>
+          </div>
+
+          <a class="menu-item" routerLink="/profile" (click)="closeMenu()">
+            <i class="material-icons">person</i>
+            {{ 'PROFILE' | translate }}
+            <span class="arrow material-icons">chevron_right</span>
+          </a>
+
+          <a class="menu-item" (click)="logout(); closeMenu()">
+            <i class="material-icons">logout</i>
+            {{ 'LOGOUT' | translate }}
+            <span class="arrow material-icons">chevron_right</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hamburger" (click)="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </nav>
+  </ng-container>
 </header>
+
 <section>
   <div class="space"></div>
 </section>

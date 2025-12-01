@@ -1,175 +1,168 @@
-import { Component } from '@angular/core';
+// src/app/profiles/components/profile-form/profile-form.component.ts
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ProfileService,
+  Profile,
+  UpdateProfileRequest,
+  RoleType,
+  BusinessType
+} from '../../services/profile.service';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, of, forkJoin, switchMap, tap, catchError } from "rxjs";
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from "../../../../environments/environment";
-import { AuthenticationService } from "../../../register/services/authentication.service";
-import { SubscriptionService } from "../../../plans/service/subscription.service";
 
 @Component({
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.css']
 })
-export class ProfileFormComponent {
-  isProfileCreated = false;
-  photoPreview: string | ArrayBuffer | null = null;
-  userRole = localStorage.getItem('userRole');
-  isFormValid = false;
-  private baseURL = environment.apiUrl;
+export class ProfileFormComponent implements OnInit {
 
-  profile = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    image: '',
-    dni: '',
-    address: '',
-    phone: '',
-    paymentMethods: [{ type: '', details: '' }]
-  };
+  form!: FormGroup;
+  loading = false;
+  errorMessage: string | null = null;
 
-  banks = ['BBVA', 'BCP', 'Scotiabank', 'Interbank', 'Banco de la Nación'];
+  currentProfile: Profile | null = null;
+
+  roleTypes: RoleType[] = ['BUYER', 'SELLER'];
+  businessTypes: BusinessType[] = ['DEALERSHIP', 'SHOP', 'WORKSHOP'];
 
   constructor(
-    private http: HttpClient,
-    private authService: AuthenticationService,
-    private subscriptionService: SubscriptionService,
-    private router: Router,
-    private snackBar: MatSnackBar
+    private fb: FormBuilder,
+    private profileService: ProfileService,
+    private router: Router
   ) {}
 
-  triggerFileInput(): void {
-    const fileInput = document.getElementById('newImages') as HTMLInputElement;
-    fileInput?.click();
-  }
+  ngOnInit(): void {
+    this.buildForm();
 
-      onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement | null;
-    if (!input?.files?.length) return;
-
-    const file = input.files[0];
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      this.photoPreview = reader.result;
-      this.checkFormValidity();
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  removeImage(): void {
-    this.photoPreview = null;
-    const fileInput = document.getElementById('newImages') as HTMLInputElement;
-    if (fileInput) fileInput.value = "";
-    this.checkFormValidity();
-  }
-
-  onSubmit(): void {
-    const { paymentMethods, ...profileData } = this.profile;
-
-    this.addProfile(profileData).subscribe({
-      next: () => {
-        this.snackBar.open('Profile created or updated successfully', 'Close', { duration: 3000 });
-        this.isProfileCreated = true;
-
-        if (paymentMethods.length > 0) {
-          this.addPaymentMethods(paymentMethods).subscribe(() => {
-            this.userRole === 'ROLE_SELLER'
-              ? this.checkAndRedirectBasedOnSubscription()
-              : this.router.navigate(['/home']);
-          });
-        } else {
-          this.router.navigate(['/home']);
-        }
+    this.loading = true;
+    this.profileService.getMyProfile().subscribe({
+      next: profile => {
+        this.loading = false;
+        this.currentProfile = profile;
+        this.patchForm(profile);
       },
-      error: () => {
-        this.snackBar.open('Error creating or updating profile', 'Close', { duration: 3000 });
-        this.router.navigate(['/error']);
+      error: err => {
+        this.loading = false;
+        if (err.status === 404) {
+          // Usuario sin perfil (caso extremo si Kafka está apagado)
+          this.currentProfile = null;
+        } else {
+          this.errorMessage = 'Error al cargar el perfil';
+        }
       }
     });
   }
 
-  addProfile(profileRequest: any): Observable<any> {
-    return this.authService.getToken().pipe(
-      switchMap(token => {
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          })
-        };
-        return this.http.post<any>(`${this.baseURL}/profiles`, profileRequest, httpOptions);
-      }),
-      catchError(() => {
-        this.snackBar.open('Error creating profile', 'Close', { duration: 3000 });
-        return of(null);
-      })
-    );
+  private buildForm(): void {
+    this.form = this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phoneNumber: [''],
+
+      roleType: ['BUYER'], // valor por defecto
+
+      // Campos de vendedor
+      ruc: [''],
+      businessType: ['SHOP'],
+      businessName: [''],
+      address: ['']
+    });
   }
 
-  addPaymentMethods(paymentMethods: any[]): Observable<any> {
-    return this.authService.getToken().pipe(
-      switchMap(token => {
-        const httpOptions = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          })
-        };
-        const addMethods$ = paymentMethods.map(method =>
-          this.http.put<any>(`${this.baseURL}/profiles/me/payment-methods/add`, method, httpOptions)
-        );
-        return forkJoin(addMethods$);
-      }),
-      catchError(() => {
-        this.snackBar.open('Error adding payment methods', 'Close', { duration: 3000 });
-        return of(null);
-      })
-    );
+  private patchForm(profile: Profile): void {
+    this.form.patchValue({
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      phoneNumber: profile.phoneNumber,
+      roleType: profile.roleType,
+      ruc: profile.sellerProfile?.ruc ?? '',
+      businessType: profile.sellerProfile?.businessType ?? 'SHOP',
+      businessName: profile.sellerProfile?.businessName ?? '',
+      address: profile.sellerProfile?.address ?? ''
+    });
   }
 
-  checkFormValidity(): void {
-    const profileValid = !!(
-      this.profile.firstName &&
-      this.profile.lastName &&
-      this.profile.email &&
-      this.profile.dni &&
-      this.profile.address &&
-      this.profile.phone &&
-      this.photoPreview
-    );
-
-    const paymentValid = this.profile.paymentMethods.every(
-      method => method.type && /^[0-9]{12,16}$/.test(method.details)
-    );
-
-    this.isFormValid = profileValid && (this.userRole !== 'ROLE_SELLER' || paymentValid);
-  }
-
-  addPaymentMethod(): void {
-    if (this.profile.paymentMethods.length >= 3) {
-      this.snackBar.open('You can only add up to 3 payment methods', 'Close', { duration: 3000 });
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-    this.profile.paymentMethods.push({ type: '', details: '' });
-    this.checkFormValidity();
-  }
 
-  removePaymentMethod(index: number): void {
-    this.profile.paymentMethods.splice(index, 1);
-    this.checkFormValidity();
-  }
+    this.loading = true;
+    this.errorMessage = null;
 
-  private checkAndRedirectBasedOnSubscription(): void {
-    this.subscriptionService.getMySubscription().subscribe({
-      next: subscription => {
-        if (subscription?.status === 'PAID') this.router.navigate(['/home']);
-        else this.router.navigate(['/plan']);
-      },
-      error: () => this.router.navigate(['/plan'])
-    });
+    const formValue = this.form.value;
+
+    // Construimos el UpdateProfileRequest
+    const payload: UpdateProfileRequest = {
+      firstName: formValue.firstName,
+      lastName: formValue.lastName,
+      email: formValue.email,
+      phoneNumber: formValue.phoneNumber,
+      roleType: formValue.roleType,
+      ruc: formValue.roleType === 'SELLER' ? formValue.ruc : null,
+      businessType: formValue.roleType === 'SELLER' ? formValue.businessType : null,
+      businessName: formValue.roleType === 'SELLER' ? formValue.businessName : null,
+      address: formValue.roleType === 'SELLER' ? formValue.address : null
+    };
+
+    // Si ya tengo un perfil => PUT /api/profiles/{id}
+    if (this.currentProfile?.id) {
+      this.profileService.updateProfile(this.currentProfile.id, payload).subscribe({
+        next: updated => {
+          this.loading = false;
+          // Cache global también se actualiza por el tap() del servicio
+          this.router.navigate(['/profile']).then();
+        },
+        error: err => {
+          this.loading = false;
+          this.errorMessage = err.error?.message || 'Error al actualizar el perfil';
+        }
+      });
+    } else {
+      // Caso extremo: no hay perfil creado.
+      // Puedes decidir si creas siempre como BUYER aquí o según roleType
+      // Ejemplo simple: si SELLER -> createSellerProfile, si no -> createCustomerProfile
+      if (formValue.roleType === 'SELLER') {
+        this.profileService.createSellerProfile({
+          firstName: formValue.firstName,
+          lastName: formValue.lastName,
+          email: formValue.email,
+          ruc: formValue.ruc,
+          businessType: formValue.businessType,
+          businessName: formValue.businessName,
+          address: formValue.address,
+          phoneNumber: formValue.phoneNumber
+        }).subscribe({
+          next: created => {
+            this.loading = false;
+            this.router.navigate(['/profile']).then();
+          },
+          error: err => {
+            this.loading = false;
+            this.errorMessage = err.error?.message || 'Error al crear el perfil de vendedor';
+          }
+        });
+      } else {
+        this.profileService.createCustomerProfile({
+          firstName: formValue.firstName,
+          lastName: formValue.lastName,
+          email: formValue.email,
+          phoneNumber: formValue.phoneNumber
+        }).subscribe({
+          next: created => {
+            this.loading = false;
+            this.router.navigate(['/profile']).then();
+          },
+          error: err => {
+            this.loading = false;
+            this.errorMessage = err.error?.message || 'Error al crear el perfil de cliente';
+          }
+        });
+      }
+    }
   }
 }

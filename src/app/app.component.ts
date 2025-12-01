@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { DisplayService } from './public/pages/service/display.service';
+import {AuthenticationService} from "./register/services/authentication.service";
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,16 @@ export class AppComponent implements OnInit {
   private noFooterRoutes: string[] = ['/profile'];
   private noHeaderFooterRoutes: string[] = ['/login', '/register', '/forgot-password', '/plan', '/payment-form', '/profile-form'];
 
-  constructor(private router: Router, private displayService: DisplayService) {}
+  constructor(
+    private router: Router,
+    private displayService: DisplayService,
+    private authService: AuthenticationService        // 👈 nuevo
+  ) {}
 
   ngOnInit() {
+    // 👉 valida/renueva token al cargar la app
+    this.authService.verifyToken().subscribe();
+
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {

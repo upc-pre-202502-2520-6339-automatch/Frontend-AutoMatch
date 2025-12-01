@@ -1,33 +1,42 @@
+// src/app/register/components/authentication-section/authentication-section.component.ts
 import { Component } from '@angular/core';
-import {Router} from "@angular/router";
-import {AuthenticationService} from "../../services/authentication.service";
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-authentication-section',
   templateUrl: './authentication-section.component.html',
-  styleUrl: './authentication-section.component.css'
+  styleUrls: ['./authentication-section.component.css']   // 👈 plural
 })
 export class AuthenticationSectionComponent {
-  currentUsername: string = '';
-  isSignedIn: boolean = false;
-  constructor(private router: Router, private authenticationService: AuthenticationService)  {
-    this.authenticationService.currentUsername.subscribe((username) => {
+  currentUsername: string | null = null;
+  isSignedIn = false;
+
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+    // 👇 usamos los observables con $
+    this.authenticationService.currentUsername$.subscribe(username => {
       this.currentUsername = username;
     });
-    this.authenticationService.isSignedIn.subscribe((isSignedIn) => {
+
+    this.authenticationService.isSignedIn$.subscribe(isSignedIn => {
       this.isSignedIn = isSignedIn;
     });
   }
 
-  onSignIn() {
-    this.router.navigate(['/sign-in']).then();
+  onSignIn(): void {
+    this.router.navigate(['/login']).then();     // 👈 ruta real
   }
 
-  onSignUp() {
-    this.router.navigate(['/sign-up']).then();
+  onSignUp(): void {
+    this.router.navigate(['/register']).then();  // 👈 ruta real
   }
 
-  onSignOut() {
-    this.authenticationService.signOut();
+  onSignOut(): void {
+    this.authenticationService.signOut().subscribe(() => {
+      this.router.navigate(['/login']).then();
+    });
   }
 }

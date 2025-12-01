@@ -1,0 +1,42 @@
+<h2>My Sales</h2>
+
+<ng-container *ngIf="salesState$ | async as state; else loadingTpl">
+  <div *ngIf="state.items.length === 0">
+    <p>You don't have sales yet.</p>
+  </div>
+
+  <div class="sale-list" *ngIf="state.items.length > 0">
+    <mat-card *ngFor="let sale of state.items" class="sale-card">
+      <mat-card-title>
+        Sale #{{ sale.id }} – {{ sale.status }}
+      </mat-card-title>
+
+      <mat-card-content>
+        <p>Vehicle ID: {{ sale.vehicleId }}</p>
+        <p>Buyer ID: {{ sale.buyerId }}</p>
+        <p>Amount: {{ sale.priceAmount }} {{ sale.priceCurrency }}</p>
+
+        <p *ngIf="sale.reservationExpiresAt">
+          Reservation expires at:
+          {{ sale.reservationExpiresAt | date:'short' }}
+        </p>
+
+        <div class="images" *ngIf="sale.images?.length">
+          <img
+            *ngFor="let img of sale.images"
+            [src]="img"
+            alt="vehicle image"
+          />
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <!-- Aquí podrías poner acciones futuras del seller, por ahora nada -->
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</ng-container>
+
+<ng-template #loadingTpl>
+  <p>Loading your sales...</p>
+</ng-template>

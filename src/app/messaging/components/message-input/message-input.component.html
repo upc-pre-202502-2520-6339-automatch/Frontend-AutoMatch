@@ -1,0 +1,13 @@
+<!-- message-input.component.html -->
+<div class="message-input">
+  <textarea
+    [(ngModel)]="text"
+    (keydown)="onKeyDown($event)"
+    rows="2"
+    placeholder="Escribe un mensaje..."
+  ></textarea>
+
+  <button type="button" (click)="onSend()">
+    Enviar
+  </button>
+</div>

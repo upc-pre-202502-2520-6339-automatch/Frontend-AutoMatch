@@ -1,0 +1,39 @@
+<div *ngIf="vehicle as v" class="car-details">
+  <img
+    class="details-image"
+    [src]="v.mainImageUrl || 'assets/images/cars/default-car.png'"
+    alt="Imagen de {{ v.brand }} {{ v.model }}"
+  />
+
+  <h2>{{ v.brand }} {{ v.model }}</h2>
+  <p>{{ v.year }} · {{ v.mileageKm | number }} km · {{ v.plate }}</p>
+  <p class="price">
+    {{ v.priceAmount | currency: v.priceCurrency }}
+  </p>
+  <p class="status">
+    Estado: {{ v.status }}
+  </p>
+</div>
+
+<div *ngIf="!vehicle && !loading && error" class="error">
+  {{ error }}
+</div>
+
+
+<!-- ... tus datos del vehículo ... -->
+
+<div class="actions">
+  <button mat-raised-button color="primary" (click)="onReserveOrBuy()" [disabled]="!vehicle || loading">
+    Reservar / Comprar
+  </button>
+</div>
+
+
+<!-- Ejemplo dentro del detalle, sección botones de acción -->
+<div class="action-buttons">
+  <!-- tu botón existente de oferta/compra -->
+  <button (click)="openChatWithSeller()" class="chat-button">
+    Chatear con el vendedor
+  </button>
+</div>
+
